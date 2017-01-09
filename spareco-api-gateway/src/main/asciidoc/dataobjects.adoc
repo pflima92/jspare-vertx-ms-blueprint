@@ -1,0 +1,57 @@
+= Cheatsheets
+
+[[AuditData]]
+== AuditData
+
+
+[cols=">25%,^25%,50%"]
+[frame="topbot"]
+|===
+^|Name | Type ^| Description
+|[[tid]]`tid`|`String`|-
+|===
+
+[[GatewayDatabaseOptions]]
+== GatewayDatabaseOptions
+
+
+[cols=">25%,^25%,50%"]
+[frame="topbot"]
+|===
+^|Name | Type ^| Description
+|[[databaseClass]]`databaseClass`|`String`|-
+|[[driverClass]]`driverClass`|`String`|-
+|[[embeddedPort]]`embeddedPort`|`Number (Integer)`|-
+|[[initialPool]]`initialPool`|`Number (Integer)`|-
+|[[maxIdleTime]]`maxIdleTime`|`Number (Integer)`|-
+|[[maxPool]]`maxPool`|`Number (Integer)`|-
+|[[maxStatementsPerConnection]]`maxStatementsPerConnection`|`Number (Integer)`|-
+|[[minPool]]`minPool`|`Number (Integer)`|-
+|[[password]]`password`|`String`|-
+|[[showCommands]]`showCommands`|`Boolean`|-
+|[[testConnection]]`testConnection`|`Boolean`|-
+|[[url]]`url`|`String`|-
+|[[username]]`username`|`String`|-
+|===
+
+[[GatewayOptions]]
+== GatewayOptions
+
+
+[cols=">25%,^25%,50%"]
+[frame="topbot"]
+|===
+^|Name | Type ^| Description
+|[[circuitBreakerOptions]]`circuitBreakerOptions`|`link:dataobjects.html#CircuitBreakerOptions[CircuitBreakerOptions]`|-
+|[[gatewayDatabaseOptions]]`gatewayDatabaseOptions`|`link:dataobjects.html#GatewayDatabaseOptions[GatewayDatabaseOptions]`|-
+|[[httpAddress]]`httpAddress`|`String`|-
+|[[httpApiPort]]`httpApiPort`|`Number (int)`|-
+|[[httpDashboardPort]]`httpDashboardPort`|`Number (int)`|-
+|[[httpProxyPort]]`httpProxyPort`|`Number (int)`|-
+|[[httpServerOptions]]`httpServerOptions`|`link:dataobjects.html#HttpServerOptions[HttpServerOptions]`|-
+|[[libPath]]`libPath`|`String`|-
+|[[owner]]`owner`|`String`|-
+|[[serialKey]]`serialKey`|`String`|-
+|[[serviceDiscoveryOptions]]`serviceDiscoveryOptions`|`link:dataobjects.html#ServiceDiscoveryOptions[ServiceDiscoveryOptions]`|-
+|===
+
