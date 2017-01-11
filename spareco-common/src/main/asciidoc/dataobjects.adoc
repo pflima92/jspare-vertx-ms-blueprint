@@ -14,7 +14,21 @@
 |[[healthPathCheck]]`healthPathCheck`|`String`|-
 |[[httpServerOptions]]`httpServerOptions`|`link:dataobjects.html#HttpServerOptions[HttpServerOptions]`|-
 |[[name]]`name`|`String`|-
+|[[periodicHealthCheck]]`periodicHealthCheck`|`Number (long)`|-
 |[[port]]`port`|`Number (int)`|-
 |[[serviceDiscoveryOptions]]`serviceDiscoveryOptions`|`link:dataobjects.html#ServiceDiscoveryOptions[ServiceDiscoveryOptions]`|-
+|===
+
+[[RecordMetadata]]
+== RecordMetadata
+
+
+[cols=">25%,^25%,50%"]
+[frame="topbot"]
+|===
+^|Name | Type ^| Description
+|[[checkHealth]]`checkHealth`|`Boolean`|-
+|[[hearthbeatPath]]`hearthbeatPath`|`String`|-
+|[[name]]`name`|`String`|-
 |===
 

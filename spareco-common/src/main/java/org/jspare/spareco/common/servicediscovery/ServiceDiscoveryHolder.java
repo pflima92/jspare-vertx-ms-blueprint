@@ -5,25 +5,33 @@ package org.jspare.spareco.common.servicediscovery;
 
 import java.util.List;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 
+import org.jspare.core.annotation.Inject;
 import org.jspare.core.annotation.Resource;
 import org.jspare.core.container.MySupport;
+import org.jspare.spareco.common.MicroserviceOptions;
+import org.jspare.spareco.common.MicroserviceOptionsHolder;
+import org.jspare.spareco.common.circuitbreaker.CircuitBreakerHolder;
 import org.jspare.vertx.annotation.VertxInject;
+import org.jspare.vertx.concurrent.FutureSupplier;
 
+import io.netty.handler.codec.http.HttpResponseStatus;
 import io.vertx.core.AsyncResult;
+import io.vertx.core.Future;
 import io.vertx.core.Handler;
 import io.vertx.core.Vertx;
+import io.vertx.core.http.HttpClient;
 import io.vertx.core.json.JsonObject;
 import io.vertx.servicediscovery.Record;
 import io.vertx.servicediscovery.ServiceDiscovery;
 import io.vertx.servicediscovery.ServiceReference;
-import io.vertx.servicediscovery.Status;
 import io.vertx.servicediscovery.types.HttpEndpoint;
 import lombok.Getter;
 
 @Resource
 public class ServiceDiscoveryHolder extends MySupport {
-
+	
 	public static ServiceDiscoveryHolder create(ServiceDiscovery serviceDiscovery) {
 
 		return new ServiceDiscoveryHolder(serviceDiscovery);
@@ -34,6 +42,12 @@ public class ServiceDiscoveryHolder extends MySupport {
 
 	@Getter
 	private final ServiceDiscovery serviceDiscovery;
+
+	@Inject
+	private MicroserviceOptionsHolder microserviceOptions;
+
+	@Inject
+	private CircuitBreakerHolder circuitBreaker;
 
 	private ServiceDiscoveryHolder(ServiceDiscovery serviceDiscovery) {
 
@@ -96,18 +110,72 @@ public class ServiceDiscoveryHolder extends MySupport {
 
 	private void startHealthCheck() {
 
-		// TODO
-		long periodic = 5000l;
-		vertx.setPeriodic(periodic, timer -> {
-
-			serviceDiscovery.getRecords(r -> r.getType().equals(HttpEndpoint.TYPE) && r.getStatus().equals(Status.UP), ar -> {
-
-				ar.result().stream().forEach(r -> {
-
-					// TODO call health check
-
-				});
+		long period = microserviceOptions.getOptions().getPeriodicHealthCheck();
+		vertx.setPeriodic(period, t -> {
+			circuitBreaker.execute(future -> { 
+				// behind the circuit breaker
+				sendHeartBeatRequest().setHandler(future.completer());
 			});
 		});
 	}
+
+	/**
+	 * Send heart-beat check request to every REST node in every interval and
+	 * await response.
+	 *
+	 * @return async result. If all nodes are active, the result will be
+	 *         assigned `true`, else the result will fail
+	 */
+	private Future<Object> sendHeartBeatRequest() {
+
+		return getAllHttpEndpoints().compose(records -> {
+			List<Future<JsonObject>> statusFutureList = records.stream()
+					.filter(record -> record.getMetadata().getString("api.name") != null).map(record -> { 
+						
+						String hearthbeatPath = record.getMetadata().getString("hearthbeat.path", MicroserviceOptions.HEALTH_PATH_CHECK); 
+						String apiName = record.getMetadata().getString("api.name");
+						HttpClient client = serviceDiscovery.getReference(record).get();
+						
+
+						Future<JsonObject> future = Future.future();
+						client.get(hearthbeatPath, response -> {
+							future.complete(new JsonObject().put("name", apiName).put("status", healthStatus(response.statusCode())));
+						}).exceptionHandler(future::fail).end();
+						return future;
+					}).collect(Collectors.toList());
+			return FutureSupplier.sequenceFuture(statusFutureList); // get all
+																// responses
+		}).map(List::stream).compose(statusList -> {
+			boolean notHealthy = statusList.anyMatch(status -> !status.getBoolean("status"));
+
+			if (notHealthy) {
+				String issues = statusList.filter(status -> !status.getBoolean("status")).map(status -> status.getString("name"))
+						.collect(Collectors.joining(", "));
+
+				String err = String.format("Heart beat check fail: %s", issues);
+				// publish log
+//				publishGatewayLog(err); TODO
+				return Future.failedFuture(new IllegalStateException(err));
+			} else {
+				// publish log
+//				publishGatewayLog("api_gateway_heartbeat_check_success"); TODO
+				return Future.succeededFuture("OK");
+			}
+		});
+	}
+	
+	/**
+	 * Gets the all endpoints.
+	 *
+	 * @return async result
+	 */
+	public Future<List<Record>> getAllHttpEndpoints() {
+		Future<List<Record>> future = Future.future();
+		serviceDiscovery.getRecords(record -> record.getType().equals(HttpEndpoint.TYPE), future.completer());
+		return future;
+	}
+	
+	private boolean healthStatus(int code) {
+	    return code == HttpResponseStatus.OK.code();
+	  }
 }

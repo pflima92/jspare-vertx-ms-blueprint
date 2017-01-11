@@ -3,6 +3,8 @@
  */
 package org.jspare.spareco.common;
 
+import java.util.concurrent.TimeUnit;
+
 import io.vertx.circuitbreaker.CircuitBreakerOptions;
 import io.vertx.codegen.annotations.DataObject;
 import io.vertx.core.http.HttpServerOptions;
@@ -12,10 +14,12 @@ import io.vertx.servicediscovery.ServiceDiscoveryOptions;
 @DataObject(generateConverter = true)
 public class MicroserviceOptions {
 
+	public static final String HEALTH_PATH_CHECK = "/health";
 	private String name;
-	private String healthPathCheck;
 	private String address;
 	private int port;
+	private String healthPathCheck;
+	private long periodicHealthCheck;
 	private HttpServerOptions httpServerOptions;
 	private CircuitBreakerOptions circuitBreakerOptions;
 	private ServiceDiscoveryOptions serviceDiscoveryOptions;
@@ -65,13 +69,14 @@ public class MicroserviceOptions {
 	public void init() {
 
 		name = "unnamed";
-		healthPathCheck = "/health";
+		healthPathCheck = HEALTH_PATH_CHECK;
 		address = "localhost";
 		port = 0;
 		httpServerOptions = new HttpServerOptions();
 		circuitBreakerOptions = new CircuitBreakerOptions();
 		serviceDiscoveryOptions = new ServiceDiscoveryOptions();
 		config = new JsonObject();
+		periodicHealthCheck = TimeUnit.SECONDS.toMillis(60l);
 	}
 
 	public void setAddress(String address) {
@@ -104,6 +109,14 @@ public class MicroserviceOptions {
 
 	public void setServiceDiscoveryOptions(ServiceDiscoveryOptions serviceDiscoveryOptions) {
 		this.serviceDiscoveryOptions = serviceDiscoveryOptions;
+	}
+
+	public long getPeriodicHealthCheck() {
+		return periodicHealthCheck;
+	}
+
+	public void setPeriodicHealthCheck(long periodicHealthCheck) {
+		this.periodicHealthCheck = periodicHealthCheck;
 	}
 
 	public JsonObject toJson() {

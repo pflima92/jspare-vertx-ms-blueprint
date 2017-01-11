@@ -22,26 +22,20 @@ import io.vertx.servicediscovery.types.HttpEndpoint;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-public abstract class RestAPIVerticle extends AbstractVerticle {
+public abstract class RestAPIVerticle extends BaseVerticle {
 
 	@Inject
 	private ServiceDiscoveryHolder discoveryHolder;
 
 	@Inject
-	private MicroserviceOptionsHolder microServiceOptionsHolder;
+	private MicroserviceOptionsHolder microserviceOptions;
 
 	private Record record;
-
-	protected MicroserviceOptions microserviceOptions;
 
 	@Override
 	public void start() throws Exception {
 
-		super.start();
-
 		log.debug("Started verticle {}", getClass().getName());
-
-		microserviceOptions = microServiceOptionsHolder.getOptions();
 
 		Router router = router();
 		enableHeartbeatCheck(router);
@@ -83,7 +77,11 @@ public abstract class RestAPIVerticle extends AbstractVerticle {
 		String apiName = getAPIName();
 		boolean ssl = httpServerOptions().isSsl();
 
-		return HttpEndpoint.createRecord(apiName, ssl, address, port, "/", new JsonObject().put("api.name", apiName));
+		return HttpEndpoint.createRecord(apiName, ssl, address, port, "/", 
+				new JsonObject()
+					.put("api.name", apiName)
+					.put("hearthbeat.path", microserviceOptions.getOptions().getHealthPathCheck())
+		);
 	}
 
 	/**
@@ -99,25 +97,25 @@ public abstract class RestAPIVerticle extends AbstractVerticle {
 
 	protected String getAddress() {
 
-		return microserviceOptions.getAddress();
+		return microserviceOptions.getOptions().getAddress();
 	}
 
 	protected String getAPIName() {
 
-		return microserviceOptions.getName();
+		return microserviceOptions.getOptions().getName();
 	}
 
 	protected Integer getApiPort() {
-		return microserviceOptions.getPort();
+		return microserviceOptions.getOptions().getPort();
 	}
 
 	protected String getHealthCheckPath() {
-		return microserviceOptions.getHealthPathCheck();
+		return microserviceOptions.getOptions().getHealthPathCheck();
 	}
 
 	protected HttpServerOptions httpServerOptions() {
 
-		HttpServerOptions httpServerOptions = new HttpServerOptions(microserviceOptions.getHttpServerOptions());
+		HttpServerOptions httpServerOptions = new HttpServerOptions(microserviceOptions.getOptions().getHttpServerOptions());
 		return httpServerOptions;
 	}
 

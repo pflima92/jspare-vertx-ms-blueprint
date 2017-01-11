@@ -77,6 +77,11 @@ public abstract class BaseVerticle extends AbstractVerticle {
 	}
 
 	protected void deployVerticle(Class<? extends Verticle> verticleClass) {
-		vertx.deployVerticle(VerticleInitializer.initialize(verticleClass), defaultDeploymentOptions());
+		
+		deployVerticle(verticleClass, defaultDeploymentOptions());
+	}
+	
+	protected void deployVerticle(Class<? extends Verticle> verticleClass, DeploymentOptions deploymentOptions) {
+		vertx.deployVerticle(VerticleInitializer.initialize(verticleClass), deploymentOptions);
 	}
 }
