@@ -42,15 +42,21 @@
 [frame="topbot"]
 |===
 ^|Name | Type ^| Description
+|[[address]]`address`|`String`|-
+|[[apiPort]]`apiPort`|`Number (int)`|-
 |[[circuitBreakerOptions]]`circuitBreakerOptions`|`link:dataobjects.html#CircuitBreakerOptions[CircuitBreakerOptions]`|-
+|[[config]]`config`|`Json object`|-
+|[[dashboardPort]]`dashboardPort`|`Number (int)`|-
 |[[gatewayDatabaseOptions]]`gatewayDatabaseOptions`|`link:dataobjects.html#GatewayDatabaseOptions[GatewayDatabaseOptions]`|-
-|[[httpAddress]]`httpAddress`|`String`|-
-|[[httpApiPort]]`httpApiPort`|`Number (int)`|-
-|[[httpDashboardPort]]`httpDashboardPort`|`Number (int)`|-
-|[[httpProxyPort]]`httpProxyPort`|`Number (int)`|-
+|[[healthCheck]]`healthCheck`|`Boolean`|-
+|[[healthPathCheck]]`healthPathCheck`|`String`|-
 |[[httpServerOptions]]`httpServerOptions`|`link:dataobjects.html#HttpServerOptions[HttpServerOptions]`|-
 |[[libPath]]`libPath`|`String`|-
+|[[name]]`name`|`String`|-
 |[[owner]]`owner`|`String`|-
+|[[periodicHealthCheck]]`periodicHealthCheck`|`Number (long)`|-
+|[[port]]`port`|`Number (int)`|-
+|[[proxyPort]]`proxyPort`|`Number (int)`|-
 |[[serialKey]]`serialKey`|`String`|-
 |[[serviceDiscoveryOptions]]`serviceDiscoveryOptions`|`link:dataobjects.html#ServiceDiscoveryOptions[ServiceDiscoveryOptions]`|-
 |===

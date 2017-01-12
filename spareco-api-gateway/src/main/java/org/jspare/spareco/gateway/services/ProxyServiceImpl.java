@@ -1,7 +1,7 @@
 package org.jspare.spareco.gateway.services;
 
 import org.jspare.core.annotation.Inject;
-import org.jspare.spareco.common.servicediscovery.ServiceDiscoveryHolder;
+import org.jspare.spareco.common.discovery.ServiceDiscoveryHolder;
 import org.jspare.vertx.annotation.VertxInject;
 
 import io.vertx.core.Future;

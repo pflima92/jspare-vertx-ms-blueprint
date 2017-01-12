@@ -6,7 +6,7 @@ package org.jspare.spareco.gateway.services;
 import java.util.Optional;
 
 import org.jspare.core.annotation.Inject;
-import org.jspare.spareco.common.servicediscovery.ServiceDiscoveryHolder;
+import org.jspare.spareco.common.discovery.ServiceDiscoveryHolder;
 
 import io.vertx.core.AsyncResult;
 import io.vertx.core.Future;

@@ -14,24 +14,24 @@
  * under the License.
  */
 
-package org.jspare.spareco.common.servicediscovery;
+package org.jspare.spareco.common.discovery;
 
 import io.vertx.core.json.JsonObject;
 import io.vertx.core.json.JsonArray;
 
 /**
- * Converter for {@link org.jspare.spareco.common.servicediscovery.RecordMetadata}.
+ * Converter for {@link org.jspare.spareco.common.discovery.RecordMetadata}.
  *
- * NOTE: This class has been automatically generated from the {@link org.jspare.spareco.common.servicediscovery.RecordMetadata} original class using Vert.x codegen.
+ * NOTE: This class has been automatically generated from the {@link org.jspare.spareco.common.discovery.RecordMetadata} original class using Vert.x codegen.
  */
 public class RecordMetadataConverter {
 
   public static void fromJson(JsonObject json, RecordMetadata obj) {
-    if (json.getValue("checkHealth") instanceof Boolean) {
-      obj.setCheckHealth((Boolean)json.getValue("checkHealth"));
+    if (json.getValue("healthCheck") instanceof Boolean) {
+      obj.setHealthCheck((Boolean)json.getValue("healthCheck"));
     }
-    if (json.getValue("hearthbeatPath") instanceof String) {
-      obj.setHearthbeatPath((String)json.getValue("hearthbeatPath"));
+    if (json.getValue("healthPathCheck") instanceof String) {
+      obj.setHealthPathCheck((String)json.getValue("healthPathCheck"));
     }
     if (json.getValue("name") instanceof String) {
       obj.setName((String)json.getValue("name"));
@@ -39,9 +39,9 @@ public class RecordMetadataConverter {
   }
 
   public static void toJson(RecordMetadata obj, JsonObject json) {
-    json.put("checkHealth", obj.isCheckHealth());
-    if (obj.getHearthbeatPath() != null) {
-      json.put("hearthbeatPath", obj.getHearthbeatPath());
+    json.put("healthCheck", obj.isHealthCheck());
+    if (obj.getHealthPathCheck() != null) {
+      json.put("healthPathCheck", obj.getHealthPathCheck());
     }
     if (obj.getName() != null) {
       json.put("name", obj.getName());

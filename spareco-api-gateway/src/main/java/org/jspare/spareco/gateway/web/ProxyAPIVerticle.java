@@ -20,10 +20,6 @@ public class ProxyAPIVerticle extends RestAPIVerticle {
 	@Inject
 	private GatewayOptionsHolder gatewayOptionsHolder;
 
-	@Override
-	protected String getAddress() {
-		return gatewayOptionsHolder.getOptions().getHttpAddress();
-	}
 
 	@Override
 	protected String getAPIName() {
@@ -32,7 +28,7 @@ public class ProxyAPIVerticle extends RestAPIVerticle {
 
 	@Override
 	protected Integer getApiPort() {
-		return gatewayOptionsHolder.getOptions().getHttpProxyPort();
+		return gatewayOptionsHolder.getOptions().getProxyPort();
 	}
 
 	@Override

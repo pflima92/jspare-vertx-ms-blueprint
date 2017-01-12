@@ -8,7 +8,6 @@ import java.util.Optional;
 import org.jspare.core.annotation.Component;
 
 import io.vertx.codegen.annotations.Fluent;
-import io.vertx.codegen.annotations.VertxGen;
 import io.vertx.core.AsyncResult;
 import io.vertx.core.Handler;
 import io.vertx.servicediscovery.Record;

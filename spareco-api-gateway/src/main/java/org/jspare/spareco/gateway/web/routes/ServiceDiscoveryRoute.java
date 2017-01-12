@@ -4,7 +4,7 @@
 package org.jspare.spareco.gateway.web.routes;
 
 import org.jspare.core.annotation.Inject;
-import org.jspare.spareco.common.servicediscovery.ServiceDiscoveryHolder;
+import org.jspare.spareco.common.discovery.ServiceDiscoveryHolder;
 import org.jspare.spareco.gateway.web.handling.GatewayAPIHandler;
 import org.jspare.vertx.web.annotation.handler.Handler;
 import org.jspare.vertx.web.annotation.method.Get;

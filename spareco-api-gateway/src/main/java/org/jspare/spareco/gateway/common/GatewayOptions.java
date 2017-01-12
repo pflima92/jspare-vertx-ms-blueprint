@@ -4,36 +4,45 @@
 package org.jspare.spareco.gateway.common;
 
 import java.util.UUID;
+import java.util.concurrent.TimeUnit;
 
-import io.vertx.circuitbreaker.CircuitBreakerOptions;
+import org.jspare.spareco.common.MicroserviceOptions;
+
 import io.vertx.codegen.annotations.DataObject;
 import io.vertx.core.http.HttpServerOptions;
 import io.vertx.core.json.JsonObject;
-import io.vertx.servicediscovery.ServiceDiscoveryOptions;
 
 @DataObject(generateConverter = true)
-public class GatewayOptions {
+public class GatewayOptions extends MicroserviceOptions {
 
-	private static final String DEFAULT_LIB_PATH = "lib";
-	private String owner;
-	private String serialKey;
+	private static final long DEFAULT_PERIOD_HEALTH_CHECK = TimeUnit.SECONDS.toMillis(60l);
 
-	private GatewayDatabaseOptions gatewayDatabaseOptions;
+	private static final int DEFAULT_DASHBOARD_PORT = 9009;
 
-	private String httpAddress;
-	private int httpApiPort;
-	private int httpProxyPort;
-	private int httpDashboardPort;
-	private HttpServerOptions httpServerOptions;
+	private static final int DEFAULT_PROXY_PORT = 9080;
 
-	private CircuitBreakerOptions circuitBreakerOptions;
-	private ServiceDiscoveryOptions serviceDiscoveryOptions;
+	private static final int DEFAULT_API_PORT = 9000;
 
-	private String libPath;
+	private static final String DEFAULT_OWNER = "unregistered";
+
+	public static final String DEFAULT_LIB_PATH = "lib";
+	
+	protected String owner;
+	protected String serialKey;
+
+	protected GatewayDatabaseOptions gatewayDatabaseOptions;
+
+	protected int apiPort;
+	protected int proxyPort;
+	protected int dashboardPort;
+
+	protected long periodicHealthCheck;
+
+	protected String libPath;
 
 	public GatewayOptions() {
 
-		init();
+		super();
 	}
 
 	public GatewayOptions(JsonObject json) {
@@ -41,105 +50,82 @@ public class GatewayOptions {
 		GatewayOptionsConverter.fromJson(json, this);
 	}
 
-	public CircuitBreakerOptions getCircuitBreakerOptions() {
-		return circuitBreakerOptions;
-	}
+	protected void init() {
 
-	public GatewayDatabaseOptions getGatewayDatabaseOptions() {
-		return gatewayDatabaseOptions;
-	}
-
-	public String getHttpAddress() {
-		return httpAddress;
-	}
-
-	public int getHttpApiPort() {
-		return httpApiPort;
-	}
-
-	public int getHttpDashboardPort() {
-		return httpDashboardPort;
-	}
-
-	public int getHttpProxyPort() {
-		return httpProxyPort;
-	}
-
-	public HttpServerOptions getHttpServerOptions() {
-		return httpServerOptions;
-	}
-
-	public String getLibPath() {
-		return libPath;
+		super.init();
+		
+		owner = DEFAULT_OWNER;
+		serialKey = UUID.randomUUID().toString();
+		gatewayDatabaseOptions = new GatewayDatabaseOptions();
+		apiPort = DEFAULT_API_PORT;
+		proxyPort = DEFAULT_PROXY_PORT;
+		dashboardPort = DEFAULT_DASHBOARD_PORT;
+		httpServerOptions = new HttpServerOptions();
+		periodicHealthCheck = DEFAULT_PERIOD_HEALTH_CHECK;
+		libPath = DEFAULT_LIB_PATH;
 	}
 
 	public String getOwner() {
 		return owner;
 	}
 
-	public String getSerialKey() {
-		return serialKey;
-	}
-
-	public ServiceDiscoveryOptions getServiceDiscoveryOptions() {
-		return serviceDiscoveryOptions;
-	}
-
-	public void setCircuitBreakerOptions(CircuitBreakerOptions circuitBreakerOptions) {
-		this.circuitBreakerOptions = circuitBreakerOptions;
-	}
-
-	public void setGatewayDatabaseOptions(GatewayDatabaseOptions gatewayDatabaseOptions) {
-		this.gatewayDatabaseOptions = gatewayDatabaseOptions;
-	}
-
-	public void setHttpAddress(String httpAddress) {
-		this.httpAddress = httpAddress;
-	}
-
-	public void setHttpApiPort(int httpApiPort) {
-		this.httpApiPort = httpApiPort;
-	}
-
-	public void setHttpDashboardPort(int httpDashboardPort) {
-		this.httpDashboardPort = httpDashboardPort;
-	}
-
-	public void setHttpProxyPort(int httpProxyPort) {
-		this.httpProxyPort = httpProxyPort;
-	}
-
-	public void setHttpServerOptions(HttpServerOptions httpServerOptions) {
-		this.httpServerOptions = httpServerOptions;
-	}
-
-	public void setLibPath(String libPath) {
-		this.libPath = libPath;
-	}
-
 	public void setOwner(String owner) {
 		this.owner = owner;
+	}
+
+	public String getSerialKey() {
+		return serialKey;
 	}
 
 	public void setSerialKey(String serialKey) {
 		this.serialKey = serialKey;
 	}
 
-	public void setServiceDiscoveryOptions(ServiceDiscoveryOptions serviceDiscoveryOptions) {
-		this.serviceDiscoveryOptions = serviceDiscoveryOptions;
+	public GatewayDatabaseOptions getGatewayDatabaseOptions() {
+		return gatewayDatabaseOptions;
 	}
 
-	private void init() {
+	public void setGatewayDatabaseOptions(GatewayDatabaseOptions gatewayDatabaseOptions) {
+		this.gatewayDatabaseOptions = gatewayDatabaseOptions;
+	}
 
-		owner = "unregistered";
-		serialKey = UUID.randomUUID().toString();
-		gatewayDatabaseOptions = new GatewayDatabaseOptions();
-		httpAddress = "localhost";
-		httpApiPort = 9000;
-		httpProxyPort = 9080;
-		httpDashboardPort = 9009;
-		httpServerOptions = new HttpServerOptions();
+	public int getApiPort() {
+		return apiPort;
+	}
 
-		libPath = DEFAULT_LIB_PATH;
+	public void setApiPort(int apiPort) {
+		this.apiPort = apiPort;
+	}
+
+	public int getProxyPort() {
+		return proxyPort;
+	}
+
+	public void setProxyPort(int proxyPort) {
+		this.proxyPort = proxyPort;
+	}
+
+	public int getDashboardPort() {
+		return dashboardPort;
+	}
+
+	public void setDashboardPort(int dashboardPort) {
+		this.dashboardPort = dashboardPort;
+	}
+
+	public long getPeriodicHealthCheck() {
+		return periodicHealthCheck;
+	}
+
+	public void setPeriodicHealthCheck(long periodicHealthCheck) {
+		this.periodicHealthCheck = periodicHealthCheck;
+	}
+
+	public String getLibPath() {
+		return libPath;
+	}
+
+	public void setLibPath(String libPath) {
+		this.libPath = libPath;
 	}
 }

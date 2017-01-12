@@ -1,5 +1,17 @@
 = Cheatsheets
 
+[[Heartbeat]]
+== Heartbeat
+
+
+[cols=">25%,^25%,50%"]
+[frame="topbot"]
+|===
+^|Name | Type ^| Description
+|[[healthy]]`healthy`|`Boolean`|-
+|[[record]]`record`|`link:dataobjects.html#Record[Record]`|-
+|===
+
 [[MicroserviceOptions]]
 == MicroserviceOptions
 
@@ -11,10 +23,10 @@
 |[[address]]`address`|`String`|-
 |[[circuitBreakerOptions]]`circuitBreakerOptions`|`link:dataobjects.html#CircuitBreakerOptions[CircuitBreakerOptions]`|-
 |[[config]]`config`|`Json object`|-
+|[[healthCheck]]`healthCheck`|`Boolean`|-
 |[[healthPathCheck]]`healthPathCheck`|`String`|-
 |[[httpServerOptions]]`httpServerOptions`|`link:dataobjects.html#HttpServerOptions[HttpServerOptions]`|-
 |[[name]]`name`|`String`|-
-|[[periodicHealthCheck]]`periodicHealthCheck`|`Number (long)`|-
 |[[port]]`port`|`Number (int)`|-
 |[[serviceDiscoveryOptions]]`serviceDiscoveryOptions`|`link:dataobjects.html#ServiceDiscoveryOptions[ServiceDiscoveryOptions]`|-
 |===
@@ -27,8 +39,8 @@
 [frame="topbot"]
 |===
 ^|Name | Type ^| Description
-|[[checkHealth]]`checkHealth`|`Boolean`|-
-|[[hearthbeatPath]]`hearthbeatPath`|`String`|-
+|[[healthCheck]]`healthCheck`|`Boolean`|-
+|[[healthPathCheck]]`healthPathCheck`|`String`|-
 |[[name]]`name`|`String`|-
 |===
 

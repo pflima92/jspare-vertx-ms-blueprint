@@ -11,7 +11,7 @@ import lombok.experimental.Accessors;
 @AllArgsConstructor
 public enum Header {
 
-	TID("tid"), GATEWAY_ORIGIN("Gateway-Origin"), AUTHORIZATION("Authorization"), INTERPROCESS_API_TOKEN("api-token");
+	TID("tid"), GATEWAY_ORIGIN("Gateway-Origin"), AUTHORIZATION("Authorization");
 
 	@Getter
 	private final String value;

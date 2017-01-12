@@ -3,8 +3,6 @@
  */
 package org.jspare.spareco.common;
 
-import java.util.concurrent.TimeUnit;
-
 import io.vertx.circuitbreaker.CircuitBreakerOptions;
 import io.vertx.codegen.annotations.DataObject;
 import io.vertx.core.http.HttpServerOptions;
@@ -14,23 +12,30 @@ import io.vertx.servicediscovery.ServiceDiscoveryOptions;
 @DataObject(generateConverter = true)
 public class MicroserviceOptions {
 
-	public static final String HEALTH_PATH_CHECK = "/health";
-	private String name;
-	private String address;
-	private int port;
-	private String healthPathCheck;
-	private long periodicHealthCheck;
-	private HttpServerOptions httpServerOptions;
-	private CircuitBreakerOptions circuitBreakerOptions;
-	private ServiceDiscoveryOptions serviceDiscoveryOptions;
-	private JsonObject config;
+	public static final int DEFAULT_PORT = 0;
+
+	public static final String DEFAULT_LOCALHOST = "localhost";
+
+	public static final String DEFAULT_NAME = "unnamed";
+
+	public static final String DEFAULT_HEALTH_PATH_CHECK = "/health";
+
+	protected String name;
+	protected String address;
+	protected int port;
+	protected boolean healthCheck;
+	protected String healthPathCheck;
+	protected HttpServerOptions httpServerOptions;
+	protected CircuitBreakerOptions circuitBreakerOptions;
+	protected ServiceDiscoveryOptions serviceDiscoveryOptions;
+	protected JsonObject config;
 
 	public MicroserviceOptions() {
 		init();
 	}
 
 	public MicroserviceOptions(JsonObject json) {
-		init();
+		this();
 		MicroserviceOptionsConverter.fromJson(json, this);
 	}
 
@@ -66,19 +71,6 @@ public class MicroserviceOptions {
 		return serviceDiscoveryOptions;
 	}
 
-	public void init() {
-
-		name = "unnamed";
-		healthPathCheck = HEALTH_PATH_CHECK;
-		address = "localhost";
-		port = 0;
-		httpServerOptions = new HttpServerOptions();
-		circuitBreakerOptions = new CircuitBreakerOptions();
-		serviceDiscoveryOptions = new ServiceDiscoveryOptions();
-		config = new JsonObject();
-		periodicHealthCheck = TimeUnit.SECONDS.toMillis(60l);
-	}
-
 	public void setAddress(String address) {
 		this.address = address;
 	}
@@ -111,12 +103,12 @@ public class MicroserviceOptions {
 		this.serviceDiscoveryOptions = serviceDiscoveryOptions;
 	}
 
-	public long getPeriodicHealthCheck() {
-		return periodicHealthCheck;
+	public boolean isHealthCheck() {
+		return healthCheck;
 	}
 
-	public void setPeriodicHealthCheck(long periodicHealthCheck) {
-		this.periodicHealthCheck = periodicHealthCheck;
+	public void setHealthCheck(boolean healthCheck) {
+		this.healthCheck = healthCheck;
 	}
 
 	public JsonObject toJson() {
@@ -128,5 +120,18 @@ public class MicroserviceOptions {
 	@Override
 	public String toString() {
 		return toJson().encodePrettily();
+	}
+
+	protected void init() {
+
+		name = DEFAULT_NAME;
+		healthPathCheck = DEFAULT_HEALTH_PATH_CHECK;
+		healthCheck = true;
+		address = DEFAULT_LOCALHOST;
+		port = DEFAULT_PORT;
+		httpServerOptions = new HttpServerOptions();
+		circuitBreakerOptions = new CircuitBreakerOptions();
+		serviceDiscoveryOptions = new ServiceDiscoveryOptions();
+		config = new JsonObject();
 	}
 }

@@ -4,7 +4,6 @@ import org.jspare.core.annotation.Component;
 import org.jspare.spareco.gateway.model.AuditData;
 
 import io.vertx.codegen.annotations.Fluent;
-import io.vertx.codegen.annotations.VertxGen;
 import io.vertx.core.AsyncResult;
 import io.vertx.core.Handler;
 

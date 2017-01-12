@@ -22,18 +22,13 @@ public class ServicesAPIVerticle extends RestAPIVerticle {
 	private GatewayOptionsHolder gatewayOptionsHolder;
 
 	@Override
-	protected String getAddress() {
-		return gatewayOptionsHolder.getOptions().getHttpAddress();
-	}
-
-	@Override
 	protected String getAPIName() {
 		return NAME;
 	}
 
 	@Override
 	protected Integer getApiPort() {
-		return gatewayOptionsHolder.getOptions().getHttpApiPort();
+		return gatewayOptionsHolder.getOptions().getApiPort();
 	}
 
 	@Override

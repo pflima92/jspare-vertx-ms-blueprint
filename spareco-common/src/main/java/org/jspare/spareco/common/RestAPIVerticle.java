@@ -4,12 +4,11 @@
 package org.jspare.spareco.common;
 
 import org.jspare.core.annotation.Inject;
+import org.jspare.spareco.common.discovery.ServiceDiscoveryHolder;
 import org.jspare.spareco.common.environment.CommonExitCode;
-import org.jspare.spareco.common.servicediscovery.ServiceDiscoveryHolder;
 import org.jspare.vertx.web.builder.HttpServerBuilder;
 import org.jspare.vertx.web.builder.RouterBuilder;
 
-import io.vertx.core.AbstractVerticle;
 import io.vertx.core.AsyncResult;
 import io.vertx.core.Future;
 import io.vertx.core.http.HttpServer;
@@ -18,33 +17,24 @@ import io.vertx.core.json.JsonObject;
 import io.vertx.ext.web.Router;
 import io.vertx.servicediscovery.Record;
 import io.vertx.servicediscovery.ServiceDiscovery;
-import io.vertx.servicediscovery.types.HttpEndpoint;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-public abstract class RestAPIVerticle extends BaseVerticle {
+public abstract class RestAPIVerticle extends MicroserviceVerticle {
 
 	@Inject
 	private ServiceDiscoveryHolder discoveryHolder;
-
-	@Inject
-	private MicroserviceOptionsHolder microserviceOptions;
 
 	private Record record;
 
 	@Override
 	public void start() throws Exception {
 
-		log.debug("Started verticle {}", getClass().getName());
+		log.debug("Started RestAPIVerticle {}", getClass().getName());
 
-		Router router = router();
-		enableHeartbeatCheck(router);
+		setOptions();
 
-		String address = getAddress();
-		Integer port = getApiPort();
-
-		HttpServerBuilder.create(vertx).router(router).httpServerOptions(httpServerOptions()).build().listen(port, address,
-				this::onHttpServer);
+		initialize();
 	}
 
 	@Override
@@ -71,19 +61,6 @@ public abstract class RestAPIVerticle extends BaseVerticle {
 		});
 	}
 
-	protected Record createRecord(Integer port) {
-
-		String address = getAddress();
-		String apiName = getAPIName();
-		boolean ssl = httpServerOptions().isSsl();
-
-		return HttpEndpoint.createRecord(apiName, ssl, address, port, "/", 
-				new JsonObject()
-					.put("api.name", apiName)
-					.put("hearthbeat.path", microserviceOptions.getOptions().getHealthPathCheck())
-		);
-	}
-
 	/**
 	 * Enable heartbeat check.
 	 *
@@ -95,35 +72,30 @@ public abstract class RestAPIVerticle extends BaseVerticle {
 		router.get(getHealthCheckPath()).handler(ctx -> ctx.response().end(new JsonObject().put("status", "UP").encode()));
 	}
 
-	protected String getAddress() {
-
-		return microserviceOptions.getOptions().getAddress();
-	}
-
-	protected String getAPIName() {
-
-		return microserviceOptions.getOptions().getName();
-	}
-
-	protected Integer getApiPort() {
-		return microserviceOptions.getOptions().getPort();
-	}
-
-	protected String getHealthCheckPath() {
-		return microserviceOptions.getOptions().getHealthPathCheck();
-	}
-
 	protected HttpServerOptions httpServerOptions() {
 
-		HttpServerOptions httpServerOptions = new HttpServerOptions(microserviceOptions.getOptions().getHttpServerOptions());
+		HttpServerOptions httpServerOptions = new HttpServerOptions(options.getHttpServerOptions());
 		return httpServerOptions;
+	}
+
+	@Override
+	protected void initialize() {
+
+		Router router = router();
+		enableHeartbeatCheck(router);
+
+		String address = getAddress();
+		Integer port = getApiPort();
+
+		HttpServerBuilder.create(vertx).router(router).httpServerOptions(httpServerOptions()).build().listen(port, address,
+				this::onHttpServer);
 	}
 
 	protected void onHttpServer(AsyncResult<HttpServer> ar) {
 
 		if (ar.succeeded()) {
 
-			record = createRecord(ar.result().actualPort());
+			record = createHttpEndpoint(ar.result().actualPort(), httpServerOptions().isSsl());
 
 			log.info("{} HttpServer listening at port {}", record.getName(), ar.result().actualPort());
 
