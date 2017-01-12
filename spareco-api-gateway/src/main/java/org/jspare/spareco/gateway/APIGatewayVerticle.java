@@ -25,9 +25,9 @@ import org.jspare.spareco.gateway.persistance.GatewayPersistance;
 import org.jspare.spareco.gateway.utils.Stopwatch;
 import org.jspare.spareco.gateway.web.ProxyAPIVerticle;
 import org.jspare.spareco.gateway.web.ServicesAPIVerticle;
-import org.jspare.vertx.concurrent.FutureSupplier;
 
 import io.vertx.core.AsyncResult;
+import io.vertx.core.CompositeFuture;
 import io.vertx.core.Future;
 import io.vertx.core.http.HttpClient;
 import io.vertx.servicediscovery.Record;
@@ -122,11 +122,12 @@ public class APIGatewayVerticle extends MicroserviceVerticle {
 		});
 	}
 
+	@SuppressWarnings("rawtypes")
 	protected Future<Object> sendHeartBeatRequest() {
 		
 		return getAllEndpoints().compose(records -> {
 			
-			List<Future<Heartbeat>> statusFutureList = records.stream()
+			List<Future> statusFutureList = records.stream()
 					.filter(record -> RecordMetadata.of(record.getMetadata()).isHealthCheck())
 					.map(record -> {
 						
@@ -140,17 +141,23 @@ public class APIGatewayVerticle extends MicroserviceVerticle {
 									.setRecord(record)
 									.setHealthy(healthStatus(response.statusCode())
 								)
-						)).exceptionHandler(future::fail)
-						.end();
+						)).exceptionHandler(t -> future.complete(new Heartbeat()
+								.setRecord(record)
+								.setHealthy(false)
+						)).end();
 						
 						return future;
 					}).collect(Collectors.toList());
 			
-			return FutureSupplier.sequenceFuture(statusFutureList).compose(statusList -> {
+			return CompositeFuture.all(statusFutureList).map(v -> statusFutureList.stream()
+			          .map(Future::result)
+			          .collect(Collectors.toList())
+			      ).compose(statusList -> {
 
-				statusFutureList.stream()
-						.filter(h -> h.result().isHealthy())
-						.map(h -> h.result().getRecord())
+			    	 statusList.stream()
+			    	 	.map(o -> (Heartbeat) o)
+						.filter(h -> !h.isHealthy())
+						.map(h -> h.getRecord())
 						.collect(Collectors.toList())
 							.forEach(this::downHttpEndpoint);
 		    	 
@@ -162,7 +169,7 @@ public class APIGatewayVerticle extends MicroserviceVerticle {
 	private void downHttpEndpoint(Record record){
 
 		record.setStatus(Status.DOWN);
-		discovery.publish(record, ar -> {
+		discovery.unpublish(record.getRegistration(), ar -> {
 				
 				log.debug("Publish to discovery to DOWN record: {} ", record);
 		});

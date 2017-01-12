@@ -30,6 +30,11 @@ public class TidHandler implements Handler<RoutingContext> {
 			ctx.response().putHeader(Header.TID.value(), tid);
 			log.debug("Received request to [{}] with TID [{}]", ctx.request().uri(), tid);
 		}
+		final	String fTid = tid;
+		ctx.response().bodyEndHandler(v -> {
+			
+			log.debug("Finish request for TID [{}]", fTid);
+		});
 
 		ctx.next();
 	}
