@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.jspare.core.annotation.Component;
-import org.jspare.spareco.gateway.model.User;
+import org.jspare.spareco.gateway.entity.User;
 
 import io.vertx.core.Future;
 

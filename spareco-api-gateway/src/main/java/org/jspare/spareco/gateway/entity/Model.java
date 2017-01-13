@@ -1,7 +1,7 @@
 /*
  *
  */
-package org.jspare.spareco.gateway.model;
+package org.jspare.spareco.gateway.entity;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;

@@ -39,7 +39,7 @@ public class GatewayAuthProvider extends MySupport implements AuthProvider {
 
 			if (res.succeeded()) {
 
-				Optional<org.jspare.spareco.gateway.model.User> oUser = res.result();
+				Optional<org.jspare.spareco.gateway.entity.User> oUser = res.result();
 				if (oUser.isPresent()) {
 
 					resultHandler.handle(Future.succeededFuture(new AuthUser(oUser.get())));

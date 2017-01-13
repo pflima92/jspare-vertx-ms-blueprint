@@ -4,7 +4,7 @@
 package org.jspare.spareco.gateway.web.routes;
 
 import org.jspare.core.annotation.Inject;
-import org.jspare.spareco.gateway.model.User;
+import org.jspare.spareco.gateway.entity.User;
 import org.jspare.spareco.gateway.services.UserService;
 import org.jspare.spareco.gateway.web.handling.GatewayAPIHandler;
 import org.jspare.vertx.web.annotation.auth.Auth;

@@ -5,7 +5,7 @@ package org.jspare.spareco.gateway.web.auth;
 
 import java.util.Set;
 
-import org.jspare.spareco.gateway.model.User;
+import org.jspare.spareco.gateway.entity.User;
 
 import io.vertx.core.AsyncResult;
 import io.vertx.core.Future;

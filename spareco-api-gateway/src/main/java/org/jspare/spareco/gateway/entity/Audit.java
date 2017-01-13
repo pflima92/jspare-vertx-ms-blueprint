@@ -13,19 +13,28 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package org.jspare.spareco.gateway.services;
+package org.jspare.spareco.gateway.entity;
 
-import org.jspare.core.annotation.Component;
-import org.jspare.spareco.gateway.entity.Audit;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Table;
 
-import io.vertx.codegen.annotations.Fluent;
-import io.vertx.core.AsyncResult;
-import io.vertx.core.Handler;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.experimental.Accessors;
 
-// @VertxGen TODO fix service class to use vertxgen
-@Component
-public interface AuditService {
+@Entity
+@Table(name = "audit")
+@Data
+@Accessors(fluent = true)
+@EqualsAndHashCode(callSuper = false)
+public class Audit extends Model {
 
-	@Fluent
-	AuditService save(Audit audit, Handler<AsyncResult<?>> resultHandler);
+	/**
+	 *
+	 */
+	private static final long serialVersionUID = 1L;
+
+	@Column
+	private String tid;
 }

@@ -1,0 +1,13 @@
+{
+	"owner" : "jspare.org",
+	"periodicHealthCheck" : 5000,
+	"gatewayDatabaseOptions" : {
+		"url": "jdbc:h2:~/test"
+	},
+	"vertx" :{
+		"options" : {
+		
+			"maxEventLoopExecuteTime" : 10000000000
+		}
+	}
+}

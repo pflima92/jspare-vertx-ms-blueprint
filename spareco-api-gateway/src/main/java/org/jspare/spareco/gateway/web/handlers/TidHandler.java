@@ -1,5 +1,17 @@
 /*
+ * Copyright 2016 JSpare.org.
  *
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not
+ * use this file except in compliance with the License. You may obtain a copy of
+ * the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations under
+ * the License.
  */
 package org.jspare.spareco.gateway.web.handlers;
 
@@ -28,12 +40,17 @@ public class TidHandler implements Handler<RoutingContext> {
 			ctx.request().headers().add(Header.TID.value(), tid);
 			ctx.request().headers().add(Header.GATEWAY_ORIGIN.value(), ctx.request().absoluteURI());
 			ctx.response().putHeader(Header.TID.value(), tid);
-			log.debug("Received request to [{}] with TID [{}]", ctx.request().uri(), tid);
+			if (log.isDebugEnabled()) {
+
+				log.debug("Received request to [{}] with TID [{}]", ctx.request().uri(), tid);
+			}
 		}
-		final	String fTid = tid;
+		final String fTid = tid;
 		ctx.response().bodyEndHandler(v -> {
-			
-			log.debug("Finish request for TID [{}]", fTid);
+			if (log.isDebugEnabled()) {
+
+				log.debug("Finish request for TID [{}]", fTid);
+			}
 		});
 
 		ctx.next();

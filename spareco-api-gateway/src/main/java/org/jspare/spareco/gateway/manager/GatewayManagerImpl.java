@@ -1,5 +1,17 @@
 /*
+ * Copyright 2016 JSpare.org.
  *
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not
+ * use this file except in compliance with the License. You may obtain a copy of
+ * the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations under
+ * the License.
  */
 package org.jspare.spareco.gateway.manager;
 
@@ -11,8 +23,8 @@ import org.jspare.core.annotation.Inject;
 import org.jspare.spareco.gateway.common.Buid;
 import org.jspare.spareco.gateway.common.GatewayOptionsHolder;
 import org.jspare.spareco.gateway.common.Version;
-import org.jspare.spareco.gateway.model.Gateway;
-import org.jspare.spareco.gateway.model.User;
+import org.jspare.spareco.gateway.entity.Gateway;
+import org.jspare.spareco.gateway.entity.User;
 import org.jspare.spareco.gateway.persistance.GatewayPersistance;
 import org.jspare.spareco.gateway.services.UserService;
 
@@ -30,16 +42,16 @@ public class GatewayManagerImpl implements GatewayManager {
 	private UserService userService;
 
 	@Override
-	public Future<Optional<Gateway>> getGateway() {
+	public Future<Optional<Gateway>> getGateway(String profile) {
 
-		return persistance.findGateway();
+		return persistance.findGateway(profile);
 	}
 
 	@Override
 	public Future<Gateway> setup() {
 
 		Future<Gateway> future = Future.future();
-		return persistance.findGateway().compose(oGateway -> {
+		return persistance.findGateway(gatewayOptionsHolder.getOptions().getProfile()).compose(oGateway -> {
 
 			if (oGateway.isPresent()) {
 
@@ -59,9 +71,10 @@ public class GatewayManagerImpl implements GatewayManager {
 
 	protected void install(Future<Gateway> future) {
 		// Install Gateway
-		Gateway gateway = (Gateway) new Gateway().owner(gatewayOptionsHolder.getOptions().getOwner())
-				.serialKey(gatewayOptionsHolder.getOptions().getSerialKey()).version(Version.currentVersion).build(Buid.getBuild())
-				.privateKey(UUID.randomUUID().toString()).createdAt(LocalDateTime.now()).updatedAt(LocalDateTime.now());
+		Gateway gateway = (Gateway) new Gateway().profile(gatewayOptionsHolder.getOptions().getProfile())
+				.owner(gatewayOptionsHolder.getOptions().getOwner()).serialKey(gatewayOptionsHolder.getOptions().getSerialKey())
+				.version(Version.currentVersion).build(Buid.getBuild()).privateKey(UUID.randomUUID().toString())
+				.createdAt(LocalDateTime.now()).updatedAt(LocalDateTime.now());
 
 		// TODO feature validate serialKey on hub, for now all of project are
 		// open source
@@ -74,7 +87,7 @@ public class GatewayManagerImpl implements GatewayManager {
 			}
 		}).compose(res -> {
 
-			User admin = new User().name("Administrator").username("admin").password("admin");
+			User admin = new User().setName("Administrator").setUsername("admin").setPassword("admin");
 
 			userService.save(admin);
 		}, Future.succeededFuture());

@@ -1,7 +1,7 @@
 /*
  *
  */
-package org.jspare.spareco.gateway.model;
+package org.jspare.spareco.gateway.entity;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -10,7 +10,7 @@ import lombok.experimental.Accessors;
 @Accessors(fluent = true)
 @Data
 @EqualsAndHashCode(callSuper = false)
-public class Configuration extends Model {
+public class Metric extends Model {
 	/**
 	*
 	*/
