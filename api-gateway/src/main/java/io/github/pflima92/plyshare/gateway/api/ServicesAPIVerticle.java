@@ -7,10 +7,8 @@ import org.jspare.core.annotation.Inject;
 import org.jspare.vertx.web.builder.RouterBuilder;
 
 import io.github.pflima92.plyshare.common.RestAPIVerticle;
-import io.github.pflima92.plyshare.gateway.api.auth.GatewayAuthProvider;
 import io.github.pflima92.plyshare.gateway.common.GatewayOptionsHolder;
 import io.vertx.ext.web.Router;
-import io.vertx.ext.web.handler.BasicAuthHandler;
 import io.vertx.ext.web.handler.BodyHandler;
 import io.vertx.ext.web.handler.ResponseTimeHandler;
 
@@ -38,8 +36,6 @@ public class ServicesAPIVerticle extends RestAPIVerticle {
 				.scanClasspath(true)
 				.addHandler(ResponseTimeHandler.create())
 				.addHandler(BodyHandler.create())
-				.authHandlerClass(BasicAuthHandler.class)
-				.authProvider(GatewayAuthProvider.create())
 				.build();
 	}
 }

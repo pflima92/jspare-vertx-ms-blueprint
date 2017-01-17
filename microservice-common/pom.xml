@@ -67,6 +67,12 @@
 			<optional>true</optional>
 		</dependency>
 
+		<dependency>
+			<groupId>io.vertx</groupId>
+			<artifactId>vertx-auth-jwt</artifactId>
+			<version>3.3.3</version>
+		</dependency>
+
 		<!-- Enable Vertx Codegen -->
 		<dependency>
 			<groupId>io.vertx</groupId>

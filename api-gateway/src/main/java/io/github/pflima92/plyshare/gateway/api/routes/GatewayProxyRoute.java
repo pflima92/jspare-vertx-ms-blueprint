@@ -7,6 +7,8 @@ import org.jspare.vertx.annotation.VertxInject;
 import org.jspare.vertx.web.annotation.handler.Handler;
 import org.jspare.vertx.web.annotation.handling.Parameter;
 import org.jspare.vertx.web.annotation.method.All;
+import org.jspare.vertx.web.annotation.method.Get;
+import org.jspare.vertx.web.annotation.method.Post;
 
 import io.github.pflima92.plyshare.common.circuitbreaker.CircuitBreakerHolder;
 import io.github.pflima92.plyshare.gateway.api.handling.GatewayAPIHandler;
@@ -18,8 +20,11 @@ import io.vertx.core.Future;
 import io.vertx.core.Vertx;
 import io.vertx.core.buffer.Buffer;
 import io.vertx.core.eventbus.EventBus;
+import io.vertx.ext.web.RoutingContext;
 import io.vertx.servicediscovery.Record;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 public class GatewayProxyRoute extends GatewayAPIHandler {
 
 	@VertxInject
@@ -61,9 +66,9 @@ public class GatewayProxyRoute extends GatewayAPIHandler {
 
 	protected void dispatchRequest(Buffer buffer, String alias) {
 
-		circuitBreaker.execute(future ->
-
-		loadBalance.getRecord(alias, ar -> doDispatch(future, buffer, ar))).setHandler(ar -> {
+		circuitBreaker.execute(future -> 
+			loadBalance.getRecord(alias, ar -> doDispatch(future, buffer, ar))
+		).setHandler(ar -> {
 
 			if (ar.failed() && !res.closed()) {
 
