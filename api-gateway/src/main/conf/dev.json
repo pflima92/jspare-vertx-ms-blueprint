@@ -1,0 +1,10 @@
+{
+	"profile" : "plyshare",
+	"owner" : "plyshare",
+	"periodicHealthCheck" : 5000,
+	"vertx" :{
+		"options" : {
+			"maxEventLoopExecuteTime" : 10000000000
+		}
+	}
+}

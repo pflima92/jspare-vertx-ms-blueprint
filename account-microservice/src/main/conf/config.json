@@ -1,0 +1,5 @@
+{
+  "api.name": "sample-microservice",
+  "api.http.address": "localhost",
+  "api.http.port": 8787
+}

@@ -2,17 +2,17 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
 	<modelVersion>4.0.0</modelVersion>
-	<groupId>org.jspare.spareco</groupId>
-	<artifactId>spareco</artifactId>
+	<groupId>io.github.pflima92.plyshare</groupId>
+	<artifactId>plyshare</artifactId>
 	<version>1.0.0-SNAPSHOT</version>
 	<packaging>pom</packaging>
 
-	<name>JSpare API Gateway</name>
-	<url>http://gateway.jspare.org</url>
-	<description>JSpare API Gateway.</description>
+	<name>Plyshare</name>
+	<url>http://pflima92.github.io</url>
+	<description>Plyshare, one microservice ecosystem with JSpare and Vert.x</description>
 	<organization>
-		<name>JSpare.org</name>
-		<url>http://jspare.org</url>
+		<name>io.com.github.pflima92</name>
+		<url>http://pflima92.github.io</url>
 	</organization>
 
 	<licenses>
@@ -23,13 +23,13 @@
 	</licenses>
 
 	<scm>
-		<url>https://github.com/jspare-projects/jspare-gateway</url>
-		<connection>scm:git:git://github.com/jspare-projects/jspare-gateway.git</connection>
-		<developerConnection>scm:git:git@github.com:jspare-projects/jspare-gateway.git</developerConnection>
+		<url>https://github.com/pflima92/jspare-vertx-ms-blueprint</url>
+		<connection>scm:git:git://github.com/pflima92/jspare-vertx-ms-blueprint.git</connection>
+		<developerConnection>scm:git:git@github.com:pflima92/jspare-vertx-ms-blueprint.git</developerConnection>
 	</scm>
 
 	<issueManagement>
-		<url>https://github.com/jspare-projects/jspare-gateway/issues</url>
+		<url>https://github.com/pflima92/jspare-vertx-ms-blueprint/issues</url>
 	</issueManagement>
 
 	<developers>
@@ -37,7 +37,7 @@
 			<id>pflima92</id>
 			<name>Paulo Lima</name>
 			<email>pflima92@gmail.com</email>
-			<organization>JSpare Org.</organization>
+			<organization>jspare.org</organization>
 			<organizationUrl>http://jspare.org</organizationUrl>
 			<roles>
 				<role>Project lead</role>
@@ -176,9 +176,12 @@
 	</dependencies>
 	
 	<modules>
-		<module>spareco-common</module>
-		<module>spareco-api-gateway</module>
-		<module>spareco-dashboard</module>
+		<module>microservice-common</module>
+		<module>api-gateway</module>
+		<module>utility-microservice</module>
+		<module>account-microservice</module>
+		<module>gallery-microservice</module>
+		<module>media-microservice</module>
 	</modules>
 
 	<distributionManagement>
