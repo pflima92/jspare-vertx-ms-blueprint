@@ -2,6 +2,7 @@
 	"profile" : "plyshare",
 	"owner" : "plyshare",
 	"periodicHealthCheck" : 5000,
+	"audit" : true,
 	"vertx" :{
 		"options" : {
 			"maxEventLoopExecuteTime" : 10000000000

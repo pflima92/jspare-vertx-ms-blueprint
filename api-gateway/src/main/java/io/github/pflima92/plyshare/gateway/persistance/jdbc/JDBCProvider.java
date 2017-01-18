@@ -22,8 +22,8 @@ import org.jspare.core.annotation.Resource;
 import org.jspare.vertx.builder.ClasspathScannerUtils;
 
 import io.github.lukehutch.fastclasspathscanner.matchprocessor.ClassAnnotationMatchProcessor;
-import io.github.pflima92.plyshare.gateway.common.GatewayDatabaseOptions;
-import io.github.pflima92.plyshare.gateway.common.GatewayOptionsHolder;
+import io.github.pflima92.plyshare.gateway.GatewayDatabaseOptions;
+import io.github.pflima92.plyshare.gateway.GatewayOptionsHolder;
 import lombok.Setter;
 
 @Resource

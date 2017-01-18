@@ -14,13 +14,11 @@ import org.apache.commons.lang.builder.ReflectionToStringBuilder;
 import org.apache.commons.lang.builder.ToStringStyle;
 
 import io.github.pflima92.plyshare.common.MicroserviceVerticle;
-import io.github.pflima92.plyshare.common.discovery.ConfigurationProvider;
+import io.github.pflima92.plyshare.common.configuration.ConfigurationProvider;
 import io.github.pflima92.plyshare.common.discovery.Heartbeat;
 import io.github.pflima92.plyshare.common.discovery.RecordMetadata;
 import io.github.pflima92.plyshare.gateway.api.ProxyAPIVerticle;
 import io.github.pflima92.plyshare.gateway.api.ServicesAPIVerticle;
-import io.github.pflima92.plyshare.gateway.common.GatewayOptions;
-import io.github.pflima92.plyshare.gateway.common.GatewayOptionsHolder;
 import io.github.pflima92.plyshare.gateway.entity.Gateway;
 import io.github.pflima92.plyshare.gateway.library.LibrarySupport;
 import io.github.pflima92.plyshare.gateway.manager.GatewayManager;

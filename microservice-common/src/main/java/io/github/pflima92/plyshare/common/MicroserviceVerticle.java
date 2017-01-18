@@ -9,7 +9,7 @@ import org.jspare.vertx.builder.ProxyServiceBuilder;
 import org.jspare.vertx.utils.VerticleInitializer;
 
 import io.github.pflima92.plyshare.common.circuitbreaker.CircuitBreakerHolder;
-import io.github.pflima92.plyshare.common.discovery.ConfigurationProvider;
+import io.github.pflima92.plyshare.common.configuration.ConfigurationProvider;
 import io.github.pflima92.plyshare.common.discovery.RecordMetadata;
 import io.github.pflima92.plyshare.common.discovery.ServiceDiscoveryHolder;
 import io.vertx.circuitbreaker.CircuitBreaker;

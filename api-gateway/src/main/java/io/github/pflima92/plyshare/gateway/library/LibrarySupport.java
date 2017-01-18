@@ -14,7 +14,7 @@ import java.util.stream.Collectors;
 import org.jspare.core.annotation.Inject;
 import org.jspare.core.annotation.Resource;
 
-import io.github.pflima92.plyshare.gateway.common.GatewayOptionsHolder;
+import io.github.pflima92.plyshare.gateway.GatewayOptionsHolder;
 import lombok.SneakyThrows;
 
 @Resource

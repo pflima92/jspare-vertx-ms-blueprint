@@ -7,7 +7,7 @@ import org.jspare.core.annotation.Inject;
 import org.jspare.vertx.web.builder.RouterBuilder;
 
 import io.github.pflima92.plyshare.common.RestAPIVerticle;
-import io.github.pflima92.plyshare.gateway.common.GatewayOptionsHolder;
+import io.github.pflima92.plyshare.gateway.GatewayOptionsHolder;
 import io.vertx.ext.web.Router;
 import io.vertx.ext.web.handler.BodyHandler;
 import io.vertx.ext.web.handler.ResponseTimeHandler;

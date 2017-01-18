@@ -13,5 +13,6 @@ public class MenuRoute extends APIHandler {
 	@Handler
 	public void message(@Parameter("message") String message){
 		
+		
 	}
 }

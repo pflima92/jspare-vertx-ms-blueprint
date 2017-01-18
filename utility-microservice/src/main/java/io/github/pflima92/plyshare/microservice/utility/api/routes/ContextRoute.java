@@ -14,6 +14,6 @@ public class ContextRoute extends APIHandler {
 	@Handler
 	public void getContext(){
 		
-		success(ctx.user());
+		success(context.user());
 	}
 }

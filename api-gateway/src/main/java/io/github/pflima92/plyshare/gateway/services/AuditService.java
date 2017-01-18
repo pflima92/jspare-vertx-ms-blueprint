@@ -19,13 +19,17 @@ import org.jspare.core.annotation.Component;
 
 import io.github.pflima92.plyshare.gateway.entity.Audit;
 import io.vertx.codegen.annotations.Fluent;
+import io.vertx.codegen.annotations.VertxGen;
 import io.vertx.core.AsyncResult;
 import io.vertx.core.Handler;
 
-// @VertxGen TODO fix service class to use vertxgen
+@VertxGen
 @Component
 public interface AuditService {
 
 	@Fluent
-	AuditService save(Audit audit, Handler<AsyncResult<?>> resultHandler);
+	AuditService save(Audit audit, Handler<AsyncResult<Audit>> resultHandler);
+	
+	@Fluent
+	AuditService findByTid(String tid, Handler<AsyncResult<Audit>> resultHandler);
 }

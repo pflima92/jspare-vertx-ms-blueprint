@@ -14,12 +14,7 @@ import javax.persistence.MappedSuperclass;
 import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
 
-import lombok.Data;
-import lombok.experimental.Accessors;
-
 @MappedSuperclass
-@Data
-@Accessors(fluent = true)
 public abstract class Model implements Serializable {
 
 	private static final long serialVersionUID = 1L;
@@ -46,4 +41,30 @@ public abstract class Model implements Serializable {
 		updatedAt = LocalDateTime.now();
 	}
 
+	public int getId() {
+		return id;
+	}
+
+	public Model setId(int id) {
+		this.id = id;
+		return this;
+	}
+
+	public LocalDateTime getCreatedAt() {
+		return createdAt;
+	}
+
+	public Model setCreatedAt(LocalDateTime createdAt) {
+		this.createdAt = createdAt;
+		return this;
+	}
+
+	public LocalDateTime getUpdatedAt() {
+		return updatedAt;
+	}
+
+	public Model setUpdatedAt(LocalDateTime updatedAt) {
+		this.updatedAt = updatedAt;
+		return this;
+	}
 }

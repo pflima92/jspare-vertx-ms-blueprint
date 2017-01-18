@@ -23,20 +23,13 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
-import lombok.experimental.Accessors;
+import io.vertx.codegen.annotations.DataObject;
+import io.vertx.core.json.JsonObject;
 
 @NamedQueries({ @NamedQuery(name = "Gateway.findByProfile", query = "from Gateway g WHERE g.profile = :profile") })
 @Entity
 @Table(name = "gateway")
-@Data
-@Accessors(fluent = true)
-@NoArgsConstructor
-@AllArgsConstructor
-@EqualsAndHashCode(callSuper = false)
+@DataObject(generateConverter = true)
 public class Gateway extends Model {
 
 	/**
@@ -58,4 +51,67 @@ public class Gateway extends Model {
 	private String build;
 	@Column
 	private LocalDateTime lastStarted;
+	
+	public Gateway() {
+	}
+	
+	public Gateway(JsonObject json) {
+		GatewayConverter.fromJson(json, this);
+	}
+	
+	public JsonObject toJson(){
+		JsonObject json = new JsonObject();
+		GatewayConverter.toJson(this, json);
+		return json;
+	}
+	
+	public String getProfile() {
+		return profile;
+	}
+	public Gateway setProfile(String profile) {
+		this.profile = profile;
+		return this;
+	}
+	public String getSerialKey() {
+		return serialKey;
+	}
+	public Gateway setSerialKey(String serialKey) {
+		this.serialKey = serialKey;
+		return this;
+	}
+	public String getPrivateKey() {
+		return privateKey;
+	}
+	public Gateway setPrivateKey(String privateKey) {
+		this.privateKey = privateKey;
+		return this;
+	}
+	public String getOwner() {
+		return owner;
+	}
+	public Gateway setOwner(String owner) {
+		this.owner = owner;
+		return this;
+	}
+	public String getVersion() {
+		return version;
+	}
+	public Gateway setVersion(String version) {
+		this.version = version;
+		return this;
+	}
+	public String getBuild() {
+		return build;
+	}
+	public Gateway setBuild(String build) {
+		this.build = build;
+		return this;
+	}
+	public LocalDateTime getLastStarted() {
+		return lastStarted;
+	}
+	public Gateway setLastStarted(LocalDateTime lastStarted) {
+		this.lastStarted = lastStarted;
+		return this;
+	}
 }

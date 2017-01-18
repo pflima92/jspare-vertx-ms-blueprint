@@ -24,8 +24,12 @@ import io.vertx.core.Future;
 
 @Component
 public interface GatewayManager {
+	
+	String VERSION = "1.0.0";
+	
+	Gateway getCurrentGateway();
 
-	Future<Optional<Gateway>> getGateway(String profile);
+	Future<Optional<Gateway>> findGateway(String profile);
 
 	Future<Gateway> setup();
 

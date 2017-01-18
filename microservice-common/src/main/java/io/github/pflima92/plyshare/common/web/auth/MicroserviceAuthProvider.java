@@ -1,7 +1,6 @@
 package io.github.pflima92.plyshare.common.web.auth;
 
 import java.util.Arrays;
-import java.util.HashSet;
 import java.util.List;
 
 import io.github.pflima92.plyshare.common.web.Gatekeeper;

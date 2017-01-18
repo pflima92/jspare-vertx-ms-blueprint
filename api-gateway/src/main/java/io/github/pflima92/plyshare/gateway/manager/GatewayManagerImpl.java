@@ -15,19 +15,14 @@
  */
 package io.github.pflima92.plyshare.gateway.manager;
 
-import java.time.LocalDateTime;
 import java.util.Optional;
 import java.util.UUID;
 
 import org.jspare.core.annotation.Inject;
 
-import io.github.pflima92.plyshare.gateway.common.Buid;
-import io.github.pflima92.plyshare.gateway.common.GatewayOptionsHolder;
-import io.github.pflima92.plyshare.gateway.common.Version;
+import io.github.pflima92.plyshare.gateway.GatewayOptionsHolder;
 import io.github.pflima92.plyshare.gateway.entity.Gateway;
-import io.github.pflima92.plyshare.gateway.entity.User;
 import io.github.pflima92.plyshare.gateway.persistance.GatewayPersistance;
-import io.github.pflima92.plyshare.gateway.services.UserService;
 import io.vertx.core.Future;
 
 public class GatewayManagerImpl implements GatewayManager {
@@ -37,14 +32,47 @@ public class GatewayManagerImpl implements GatewayManager {
 
 	@Inject
 	private GatewayOptionsHolder gatewayOptionsHolder;
-
-	@Inject
-	private UserService userService;
+	
+	private Gateway gateway;
 
 	@Override
-	public Future<Optional<Gateway>> getGateway(String profile) {
+	public Future<Optional<Gateway>> findGateway(String profile) {
 
 		return persistance.findGateway(profile);
+	}
+
+	private String getBuild() {
+
+		return "DEV-MODE";
+	}
+
+	@Override
+	public Gateway getCurrentGateway() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	protected void install(Future<Gateway> future) {
+		// Install Gateway
+		Gateway gateway = (Gateway) new Gateway()
+				.setProfile(gatewayOptionsHolder.getOptions().getProfile())
+				.setOwner(gatewayOptionsHolder.getOptions().getOwner())
+				.setSerialKey(gatewayOptionsHolder.getOptions().getSerialKey())
+				.setVersion(VERSION)
+				.setBuild(getBuild())
+				.setPrivateKey(UUID.randomUUID().toString());
+
+		// TODO feature validate serialKey on hub, for now all of project are
+		// open source
+		persistance.persistGateway(gateway).setHandler(res -> {
+
+			if (res.succeeded() && res.result() != null) {
+				this.gateway = gateway;
+				future.complete(gateway);
+			} else {
+				future.fail(res.cause());
+			}
+		});
 	}
 
 	@Override
@@ -55,7 +83,8 @@ public class GatewayManagerImpl implements GatewayManager {
 
 			if (oGateway.isPresent()) {
 
-				future.complete(oGateway.get());
+				gateway = oGateway.get();
+				future.complete(gateway);
 			} else {
 
 				install(future);
@@ -67,29 +96,5 @@ public class GatewayManagerImpl implements GatewayManager {
 	public Future<Boolean> update(Gateway gateway) {
 
 		return null;
-	}
-
-	protected void install(Future<Gateway> future) {
-		// Install Gateway
-		Gateway gateway = (Gateway) new Gateway().profile(gatewayOptionsHolder.getOptions().getProfile())
-				.owner(gatewayOptionsHolder.getOptions().getOwner()).serialKey(gatewayOptionsHolder.getOptions().getSerialKey())
-				.version(Version.currentVersion).build(Buid.getBuild()).privateKey(UUID.randomUUID().toString())
-				.createdAt(LocalDateTime.now()).updatedAt(LocalDateTime.now());
-
-		// TODO feature validate serialKey on hub, for now all of project are
-		// open source
-		persistance.persistGateway(gateway).setHandler(res -> {
-
-			if (res.succeeded() && res.result() != null) {
-				future.complete(gateway);
-			} else {
-				future.fail(res.cause());
-			}
-		}).compose(res -> {
-
-			User admin = new User().setName("Administrator").setUsername("admin").setPassword("admin");
-
-			userService.save(admin);
-		}, Future.succeededFuture());
 	}
 }

@@ -10,6 +10,8 @@ import org.jspare.core.annotation.Inject;
 
 import io.github.pflima92.plyshare.common.discovery.RecordMetadata;
 import io.github.pflima92.plyshare.common.discovery.ServiceDiscoveryHolder;
+import io.github.pflima92.plyshare.common.web.BusinessException;
+import io.github.pflima92.plyshare.common.web.Reason;
 import io.vertx.core.AsyncResult;
 import io.vertx.core.Future;
 import io.vertx.core.Handler;
@@ -17,18 +19,19 @@ import io.vertx.servicediscovery.Record;
 
 public class LoadBalanceServiceImpl implements LoadBalanceService {
 
+	private static final Reason RECORD_NOT_FOUND_REASON = Reason.error("record_not_found").detail("Record not found");
 	@Inject
 	private ServiceDiscoveryHolder serviceDiscovery;
 
 	@Override
-	public LoadBalanceService getRecord(String alias, Handler<AsyncResult<Optional<Record>>> oRecordHandler) {
+	public LoadBalanceService getRecord(String alias, Handler<AsyncResult<Record>> resultHandler) {
 		
-		serviceDiscovery.getAllHttpEndpoints().setHandler(ar -> handleRecordList(alias, ar).setHandler(oRecordHandler));
+		serviceDiscovery.getAllHttpEndpoints().setHandler(ar -> handleRecordList(alias, ar).setHandler(resultHandler));
 		return this;
 	}
 	
-	protected Future<Optional<Record>> handleRecordList(String alias, AsyncResult<List<Record>> resultHandler){
-		Future<Optional<Record>> future = Future.future();
+	protected Future<Record> handleRecordList(String alias, AsyncResult<List<Record>> resultHandler){
+		Future<Record> future = Future.future();
 		
 		if(resultHandler.succeeded()){
 
@@ -36,7 +39,8 @@ public class LoadBalanceServiceImpl implements LoadBalanceService {
 			Optional<Record> client = resultHandler.result().stream()
 					.filter(record -> RecordMetadata.of(record.getMetadata()).getName().equals(alias)).findAny();
 			
-			future.complete(client);
+			if(client.isPresent()) future.complete(client.get());
+			else future.fail(new BusinessException(RECORD_NOT_FOUND_REASON));
 		}else{
 			future.fail(resultHandler.cause());
 		}

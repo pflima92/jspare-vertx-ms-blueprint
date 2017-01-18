@@ -17,17 +17,19 @@ package io.github.pflima92.plyshare.gateway.entity;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.experimental.Accessors;
+import io.vertx.codegen.annotations.DataObject;
+import io.vertx.core.json.JsonObject;
 
+@NamedQueries({ @NamedQuery(name = "Audit.findByTid", query = "from Audit a WHERE a.tid = :tid") })
 @Entity
 @Table(name = "audit")
-@Data
-@Accessors(fluent = true)
-@EqualsAndHashCode(callSuper = false)
+@DataObject(generateConverter = true)
 public class Audit extends Model {
 
 	/**
@@ -37,4 +39,51 @@ public class Audit extends Model {
 
 	@Column
 	private String tid;
+	
+	@Column
+	private int responseCode;
+	
+	@ManyToOne
+	@JoinColumn(name = "fk_gateway_id")
+	private Gateway gateway;
+	
+	public Audit() {
+	}
+	
+	public Audit(JsonObject json) {
+		AuditConverter.fromJson(json, this);
+	}
+	
+	public JsonObject toJson(){
+		JsonObject json = new JsonObject();
+		AuditConverter.toJson(this, json);
+		return json;
+	}
+
+	public String getTid() {
+		return tid;
+	}
+
+	public Audit setTid(String tid) {
+		this.tid = tid;
+		return this;
+	}
+
+	public Gateway getGateway() {
+		return gateway;
+	}
+
+	public Audit setGateway(Gateway gateway) {
+		this.gateway = gateway;
+		return this;
+	}
+
+	public int getResponseCode() {
+		return responseCode;
+	}
+
+	public Audit setResponseCode(int responseCode) {
+		this.responseCode = responseCode;
+		return this;
+	}
 }

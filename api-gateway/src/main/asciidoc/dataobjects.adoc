@@ -1,5 +1,35 @@
 = Cheatsheets
 
+[[Audit]]
+== Audit
+
+
+[cols=">25%,^25%,50%"]
+[frame="topbot"]
+|===
+^|Name | Type ^| Description
+|[[gateway]]`gateway`|`link:dataobjects.html#Gateway[Gateway]`|-
+|[[id]]`id`|`Number (int)`|-
+|[[tid]]`tid`|`String`|-
+|===
+
+[[Gateway]]
+== Gateway
+
+
+[cols=">25%,^25%,50%"]
+[frame="topbot"]
+|===
+^|Name | Type ^| Description
+|[[build]]`build`|`String`|-
+|[[id]]`id`|`Number (int)`|-
+|[[owner]]`owner`|`String`|-
+|[[privateKey]]`privateKey`|`String`|-
+|[[profile]]`profile`|`String`|-
+|[[serialKey]]`serialKey`|`String`|-
+|[[version]]`version`|`String`|-
+|===
+
 [[GatewayDatabaseOptions]]
 == GatewayDatabaseOptions
 
@@ -33,6 +63,7 @@
 ^|Name | Type ^| Description
 |[[address]]`address`|`String`|-
 |[[apiPort]]`apiPort`|`Number (int)`|-
+|[[audit]]`audit`|`Boolean`|-
 |[[circuitBreakerOptions]]`circuitBreakerOptions`|`link:dataobjects.html#CircuitBreakerOptions[CircuitBreakerOptions]`|-
 |[[config]]`config`|`Json object`|-
 |[[dashboardPort]]`dashboardPort`|`Number (int)`|-
