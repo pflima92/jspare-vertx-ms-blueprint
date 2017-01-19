@@ -27,9 +27,9 @@ public interface GatewayManager {
 	
 	String VERSION = "1.0.0";
 	
-	Gateway getCurrentGateway();
-
 	Future<Optional<Gateway>> findGateway(String profile);
+
+	Gateway getCurrentGateway();
 
 	Future<Gateway> setup();
 

@@ -30,38 +30,6 @@ public abstract class RestAPIVerticle extends MicroserviceVerticle {
 
 	private Record record;
 	
-	@Override
-	public void start() throws Exception {
-
-		log.debug("Started RestAPIVerticle {}", getClass().getName());
-
-		setOptions();
-
-		initialize();
-	}
-
-	@Override
-	public void stop(Future<Void> future) throws Exception {
-
-		log.debug("Stoping verticle {}", getClass().getName());
-
-		Future<Void> unregistryFuture = Future.future();
-		discovery.unpublish(record.getRegistration(), unregistryFuture.completer());
-
-		unregistryFuture.setHandler(ar -> {
-
-			if (discovery != null) {
-				discovery.close();
-			}
-
-			if (ar.failed()) {
-				future.fail(ar.cause());
-			} else {
-				future.complete();
-			}
-		});
-	}
-
 	/**
 	 * Enable heartbeat check.
 	 *
@@ -125,5 +93,37 @@ public abstract class RestAPIVerticle extends MicroserviceVerticle {
 	protected Router router() {
 
 		return RouterBuilder.create(vertx).build();
+	}
+
+	@Override
+	public void start() throws Exception {
+
+		log.debug("Started RestAPIVerticle {}", getClass().getName());
+
+		setOptions();
+
+		initialize();
+	}
+
+	@Override
+	public void stop(Future<Void> future) throws Exception {
+
+		log.debug("Stoping verticle {}", getClass().getName());
+
+		Future<Void> unregistryFuture = Future.future();
+		discovery.unpublish(record.getRegistration(), unregistryFuture.completer());
+
+		unregistryFuture.setHandler(ar -> {
+
+			if (discovery != null) {
+				discovery.close();
+			}
+
+			if (ar.failed()) {
+				future.fail(ar.cause());
+			} else {
+				future.complete();
+			}
+		});
 	}
 }

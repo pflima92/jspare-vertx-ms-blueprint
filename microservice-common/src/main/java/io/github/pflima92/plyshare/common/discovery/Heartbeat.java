@@ -20,21 +20,10 @@ public class Heartbeat {
 		HeartbeatConverter.fromJson(json, this);
 	}
 
-	public JsonObject toJson() {
-		JsonObject json = new JsonObject();
-		HeartbeatConverter.toJson(this, json);
-		return json;
-	}
-
-
 	public Record getRecord() {
 		return record;
 	}
 
-	public Heartbeat setRecord(Record record) {
-		this.record = record;
-		return this;
-	}
 
 	public boolean isHealthy() {
 		return healthy;
@@ -43,5 +32,16 @@ public class Heartbeat {
 	public Heartbeat setHealthy(boolean healthy) {
 		this.healthy = healthy;
 		return this;
+	}
+
+	public Heartbeat setRecord(Record record) {
+		this.record = record;
+		return this;
+	}
+
+	public JsonObject toJson() {
+		JsonObject json = new JsonObject();
+		HeartbeatConverter.toJson(this, json);
+		return json;
 	}
 }

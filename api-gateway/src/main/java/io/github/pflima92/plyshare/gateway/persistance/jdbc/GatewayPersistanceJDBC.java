@@ -17,12 +17,15 @@ package io.github.pflima92.plyshare.gateway.persistance.jdbc;
 
 import static org.jspare.core.container.Environment.my;
 
+import java.util.List;
 import java.util.Optional;
 
 import io.github.pflima92.plyshare.gateway.entity.Audit;
+import io.github.pflima92.plyshare.gateway.entity.Event;
 import io.github.pflima92.plyshare.gateway.entity.Gateway;
 import io.github.pflima92.plyshare.gateway.persistance.GatewayPersistance;
 import io.vertx.core.Future;
+import io.vertx.core.json.JsonObject;
 
 public class GatewayPersistanceJDBC implements GatewayPersistance {
 
@@ -33,12 +36,41 @@ public class GatewayPersistanceJDBC implements GatewayPersistance {
 	}
 
 	@Override
+	public Future<Optional<Audit>> findAuditByTid(String tid) {
+
+		return JDBCExecutor.create().execute(session -> {
+
+			return session.createNamedQuery("Audit.findByTid", Audit.class).setParameter("tid", tid).getResultList().stream().findFirst();
+		});
+	}
+
+	@Override
 	public Future<Optional<Gateway>> findGateway(String profile) {
 
 		return JDBCExecutor.create().execute(session -> {
 
 			return session.createNamedQuery("Gateway.findByProfile", Gateway.class).setParameter("profile", profile).getResultList()
 					.stream().findFirst();
+		});
+	}
+
+	@Override
+	@SuppressWarnings("unchecked")
+	public Future<List<Audit>> listAudit(JsonObject filter) {
+
+		return JDBCExecutor.create().execute(session -> {
+
+			return session.createQuery(String.format("from %s t", Audit.class.getSimpleName())).getResultList();
+		});
+	}
+
+	@Override
+	public Future<Audit> persistAudit(Audit audit) {
+
+		return JDBCExecutor.create().execute(session -> {
+
+			Audit merged = session.merge(audit);
+			return merged;
 		});
 	}
 
@@ -53,21 +85,21 @@ public class GatewayPersistanceJDBC implements GatewayPersistance {
 	}
 
 	@Override
-	public Future<Audit> persistAudit(Audit audit) {
-
+	public Future<Event> persisEvent(Event event) {
 		return JDBCExecutor.create().execute(session -> {
 
-			session.persist(audit);
-			return audit;
+			session.persist(event);
+			return event;
 		});
 	}
 
 	@Override
-	public Future<Optional<Audit>> findAuditByTid(String tid) {
+	@SuppressWarnings("unchecked")
+	public Future<List<Event>> listEvents(JsonObject filter) {
 		
 		return JDBCExecutor.create().execute(session -> {
-			
-			return session.createNamedQuery("Audit.findByTid", Audit.class).setParameter("tid", tid).getResultList().stream().findFirst();
+
+			return session.createQuery(String.format("from %s t", Event.class.getSimpleName())).getResultList();
 		});
 	}
 }

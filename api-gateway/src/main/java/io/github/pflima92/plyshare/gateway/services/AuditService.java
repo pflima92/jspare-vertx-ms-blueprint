@@ -15,6 +15,8 @@
  */
 package io.github.pflima92.plyshare.gateway.services;
 
+import java.util.List;
+
 import org.jspare.core.annotation.Component;
 
 import io.github.pflima92.plyshare.gateway.entity.Audit;
@@ -22,14 +24,18 @@ import io.vertx.codegen.annotations.Fluent;
 import io.vertx.codegen.annotations.VertxGen;
 import io.vertx.core.AsyncResult;
 import io.vertx.core.Handler;
+import io.vertx.core.json.JsonObject;
 
 @VertxGen
 @Component
 public interface AuditService {
 
 	@Fluent
-	AuditService save(Audit audit, Handler<AsyncResult<Audit>> resultHandler);
+	AuditService findByTid(String tid, Handler<AsyncResult<Audit>> resultHandler);
 	
 	@Fluent
-	AuditService findByTid(String tid, Handler<AsyncResult<Audit>> resultHandler);
+	AuditService list(JsonObject filter, Handler<AsyncResult<List<Audit>>> resultHandler);
+	
+	@Fluent
+	AuditService save(Audit audit, Handler<AsyncResult<Audit>> resultHandler);
 }

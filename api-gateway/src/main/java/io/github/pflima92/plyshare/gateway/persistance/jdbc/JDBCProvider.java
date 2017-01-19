@@ -65,11 +65,6 @@ public class JDBCProvider {
 		return entityManagerFactory;
 	}
 
-	public EntityManager getEntityManager() {
-
-		return entityManagerFactory.createEntityManager();
-	}
-
 	protected Properties createProperties() {
 
 		GatewayDatabaseOptions options = gatewayOptionsHolder.getOptions().getGatewayDatabaseOptions();
@@ -89,6 +84,11 @@ public class JDBCProvider {
 		properties.setProperty("hibernate.c3p0.testConnectionOnCheckout", String.valueOf(options.getTestConnection()));
 		properties.setProperty("hibernate.temp.use_jdbc_metadata_defaults", "false");
 		return properties;
+	}
+
+	public EntityManager getEntityManager() {
+
+		return entityManagerFactory.createEntityManager();
 	}
 
 	@After

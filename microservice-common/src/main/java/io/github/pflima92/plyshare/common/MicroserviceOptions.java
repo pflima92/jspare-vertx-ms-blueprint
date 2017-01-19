@@ -71,6 +71,23 @@ public class MicroserviceOptions {
 		return serviceDiscoveryOptions;
 	}
 
+	protected void init() {
+
+		name = DEFAULT_NAME;
+		healthPathCheck = DEFAULT_HEALTH_PATH_CHECK;
+		healthCheck = true;
+		address = DEFAULT_LOCALHOST;
+		port = DEFAULT_PORT;
+		httpServerOptions = new HttpServerOptions();
+		circuitBreakerOptions = new CircuitBreakerOptions();
+		serviceDiscoveryOptions = new ServiceDiscoveryOptions();
+		config = new JsonObject();
+	}
+
+	public boolean isHealthCheck() {
+		return healthCheck;
+	}
+
 	public void setAddress(String address) {
 		this.address = address;
 	}
@@ -81,6 +98,10 @@ public class MicroserviceOptions {
 
 	public void setConfig(JsonObject config) {
 		this.config = config;
+	}
+
+	public void setHealthCheck(boolean healthCheck) {
+		this.healthCheck = healthCheck;
 	}
 
 	public void setHealthPathCheck(String healthPathCheck) {
@@ -103,14 +124,6 @@ public class MicroserviceOptions {
 		this.serviceDiscoveryOptions = serviceDiscoveryOptions;
 	}
 
-	public boolean isHealthCheck() {
-		return healthCheck;
-	}
-
-	public void setHealthCheck(boolean healthCheck) {
-		this.healthCheck = healthCheck;
-	}
-
 	public JsonObject toJson() {
 		JsonObject json = new JsonObject();
 		MicroserviceOptionsConverter.toJson(this, json);
@@ -120,18 +133,5 @@ public class MicroserviceOptions {
 	@Override
 	public String toString() {
 		return toJson().encodePrettily();
-	}
-
-	protected void init() {
-
-		name = DEFAULT_NAME;
-		healthPathCheck = DEFAULT_HEALTH_PATH_CHECK;
-		healthCheck = true;
-		address = DEFAULT_LOCALHOST;
-		port = DEFAULT_PORT;
-		httpServerOptions = new HttpServerOptions();
-		circuitBreakerOptions = new CircuitBreakerOptions();
-		serviceDiscoveryOptions = new ServiceDiscoveryOptions();
-		config = new JsonObject();
 	}
 }

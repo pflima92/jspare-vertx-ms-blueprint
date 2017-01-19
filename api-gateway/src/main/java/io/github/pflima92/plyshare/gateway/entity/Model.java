@@ -30,6 +30,18 @@ public abstract class Model implements Serializable {
 	@Column(name = "dt_atualizado", updatable = true)
 	protected LocalDateTime updatedAt;
 
+	public LocalDateTime getCreatedAt() {
+		return createdAt;
+	}
+
+	public int getId() {
+		return id;
+	}
+
+	public LocalDateTime getUpdatedAt() {
+		return updatedAt;
+	}
+
 	@PrePersist
 	public void onCreatedAt() {
 		createdAt = LocalDateTime.now();
@@ -41,26 +53,14 @@ public abstract class Model implements Serializable {
 		updatedAt = LocalDateTime.now();
 	}
 
-	public int getId() {
-		return id;
-	}
-
-	public Model setId(int id) {
-		this.id = id;
-		return this;
-	}
-
-	public LocalDateTime getCreatedAt() {
-		return createdAt;
-	}
-
 	public Model setCreatedAt(LocalDateTime createdAt) {
 		this.createdAt = createdAt;
 		return this;
 	}
 
-	public LocalDateTime getUpdatedAt() {
-		return updatedAt;
+	public Model setId(int id) {
+		this.id = id;
+		return this;
 	}
 
 	public Model setUpdatedAt(LocalDateTime updatedAt) {

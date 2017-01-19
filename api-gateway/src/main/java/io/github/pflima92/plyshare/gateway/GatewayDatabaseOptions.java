@@ -113,6 +113,23 @@ public class GatewayDatabaseOptions {
 		return username;
 	}
 
+	private void init() {
+
+		databaseClass = DEFAULT_DATABASE_CLASS;
+		url = DETAULT_URL;
+		driverClass = DEFAULT_H2_DRIVER;
+		username = StringUtils.EMPTY;
+		password = StringUtils.EMPTY;
+		embeddedPort = DEFAULT_EMBEDDED_PORT;
+		maxPool = DEFAULT_MAX_POOL;
+		minPool = DEFAULT_MIN_POOL;
+		initialPool = DEFAULT_INITIAL_POOL;
+		maxIdleTime = DEFAULT_MAX_IDLE_TIME;
+		maxStatementsPerConnection = DEFAULT_MAX_STATEMENTS_PER_CONNECTION;
+		showCommands = false;
+		testConnection = true;
+	}
+
 	public void setDatabaseClass(String databaseClass) {
 		this.databaseClass = databaseClass;
 	}
@@ -163,22 +180,5 @@ public class GatewayDatabaseOptions {
 
 	public void setUsername(String username) {
 		this.username = username;
-	}
-
-	private void init() {
-
-		databaseClass = DEFAULT_DATABASE_CLASS;
-		url = DETAULT_URL;
-		driverClass = DEFAULT_H2_DRIVER;
-		username = StringUtils.EMPTY;
-		password = StringUtils.EMPTY;
-		embeddedPort = DEFAULT_EMBEDDED_PORT;
-		maxPool = DEFAULT_MAX_POOL;
-		minPool = DEFAULT_MIN_POOL;
-		initialPool = DEFAULT_INITIAL_POOL;
-		maxIdleTime = DEFAULT_MAX_IDLE_TIME;
-		maxStatementsPerConnection = DEFAULT_MAX_STATEMENTS_PER_CONNECTION;
-		showCommands = false;
-		testConnection = true;
 	}
 }

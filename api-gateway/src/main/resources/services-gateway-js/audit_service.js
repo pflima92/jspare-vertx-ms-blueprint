@@ -33,6 +33,48 @@ var AuditService = function(j_val) {
   /**
 
    @public
+   @param tid {string} 
+   @param resultHandler {function} 
+   @return {AuditService}
+   */
+  this.findByTid = function(tid, resultHandler) {
+    var __args = arguments;
+    if (__args.length === 2 && typeof __args[0] === 'string' && typeof __args[1] === 'function') {
+      j_auditService["findByTid(java.lang.String,io.vertx.core.Handler)"](tid, function(ar) {
+      if (ar.succeeded()) {
+        resultHandler(utils.convReturnDataObject(ar.result()), null);
+      } else {
+        resultHandler(null, ar.cause());
+      }
+    });
+      return that;
+    } else throw new TypeError('function invoked with invalid arguments');
+  };
+
+  /**
+
+   @public
+   @param filter {Object} 
+   @param resultHandler {function} 
+   @return {AuditService}
+   */
+  this.list = function(filter, resultHandler) {
+    var __args = arguments;
+    if (__args.length === 2 && (typeof __args[0] === 'object' && __args[0] != null) && typeof __args[1] === 'function') {
+      j_auditService["list(io.vertx.core.json.JsonObject,io.vertx.core.Handler)"](utils.convParamJsonObject(filter), function(ar) {
+      if (ar.succeeded()) {
+        resultHandler(utils.convReturnListSetDataObject(ar.result()), null);
+      } else {
+        resultHandler(null, ar.cause());
+      }
+    });
+      return that;
+    } else throw new TypeError('function invoked with invalid arguments');
+  };
+
+  /**
+
+   @public
    @param audit {Object} 
    @param resultHandler {function} 
    @return {AuditService}
@@ -42,7 +84,7 @@ var AuditService = function(j_val) {
     if (__args.length === 2 && (typeof __args[0] === 'object' && __args[0] != null) && typeof __args[1] === 'function') {
       j_auditService["save(io.github.pflima92.plyshare.gateway.entity.Audit,io.vertx.core.Handler)"](audit != null ? new Audit(new JsonObject(JSON.stringify(audit))) : null, function(ar) {
       if (ar.succeeded()) {
-        resultHandler(ar.result(), null);
+        resultHandler(utils.convReturnDataObject(ar.result()), null);
       } else {
         resultHandler(null, ar.cause());
       }

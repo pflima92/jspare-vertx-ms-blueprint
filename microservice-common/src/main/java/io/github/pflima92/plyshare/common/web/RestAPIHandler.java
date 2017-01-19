@@ -16,6 +16,10 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public abstract class RestAPIHandler extends APIHandler {
 
+	protected String getTid(){
+		return getHeader(Header.TID.value()).orElse(StringUtils.EMPTY);
+	}
+	
 	@SuppressWarnings("rawtypes")
 	protected void handler(AsyncResult<?> asyncResult) {
 
@@ -31,12 +35,15 @@ public abstract class RestAPIHandler extends APIHandler {
 			noContent();
 			return;
 		}
-
-		success(asyncResult.result());
-	}
-	
-	protected String getTid(){
-		return getHeader(Header.TID.value()).orElse(StringUtils.EMPTY);
+		
+		if(asyncResult.result() == null){
+			
+			success();
+		}
+		else{
+			
+			success(asyncResult.result());
+		}
 	}
 	
 	protected JsonObject responseInfo(String message){
@@ -44,27 +51,16 @@ public abstract class RestAPIHandler extends APIHandler {
 		return new JsonObject().put("message", message);
 	}
 	
-	@Override
-	protected String transform(Object data) {
-		
-		return Json.encode(simpleResponse(data));
-	}
-	
 	public SimpleResponse simpleResponse() {
 
 		return ResponseHelper.create(context);
 	}
-
+	
 	public SimpleResponse simpleResponse(BusinessException e) {
 
 		return ResponseHelper.create(context, e);
 	}
 
-	public SimpleResponse simpleResponse(Throwable t) {
-
-		return ResponseHelper.create(context, t);
-	}
-	
 	public SimpleResponse simpleResponse(Object data) {
 
 		if (data instanceof SimpleResponse) {
@@ -79,5 +75,16 @@ public abstract class RestAPIHandler extends APIHandler {
 		}
 
 		return ResponseHelper.create(context).setValue(data);
+	}
+
+	public SimpleResponse simpleResponse(Throwable t) {
+
+		return ResponseHelper.create(context, t);
+	}
+	
+	@Override
+	protected String transform(Object data) {
+		
+		return Json.encode(simpleResponse(data));
 	}
 }

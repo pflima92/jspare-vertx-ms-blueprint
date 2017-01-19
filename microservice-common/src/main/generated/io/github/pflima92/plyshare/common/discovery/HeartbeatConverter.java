@@ -17,7 +17,6 @@
 package io.github.pflima92.plyshare.common.discovery;
 
 import io.vertx.core.json.JsonObject;
-import io.vertx.core.json.JsonArray;
 
 /**
  * Converter for {@link io.github.pflima92.plyshare.common.discovery.Heartbeat}.

@@ -9,14 +9,14 @@ import io.vertx.core.json.JsonObject;
 @DataObject(generateConverter = true)
 public class RecordMetadata {
 
-	private String name;
-	private boolean healthCheck;
-	private String healthPathCheck;
-
 	public static RecordMetadata of(JsonObject json){
 		
 		return new RecordMetadata(json);
 	}
+	private String name;
+	private boolean healthCheck;
+
+	private String healthPathCheck;
 	
 	public RecordMetadata() {
 	}

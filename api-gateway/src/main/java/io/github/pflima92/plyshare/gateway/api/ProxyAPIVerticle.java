@@ -39,6 +39,12 @@ public class ProxyAPIVerticle extends RestAPIVerticle {
 		return gatewayOptionsHolder.getOptions().getProxyPort();
 	}
 
+	protected AuthProvider getAuthProvider() {
+
+ 		// TODO
+		return new MicroserviceAuthProvider(Arrays.asList(Object.class));
+	}
+	
 	@Override
 	protected Router router() {
 		
@@ -53,11 +59,5 @@ public class ProxyAPIVerticle extends RestAPIVerticle {
 					.addRoute(GatewayProxyRoute.class)
 					.addRoute(UAARoute.class)
 					.build();
-	}
-	
-	protected AuthProvider getAuthProvider() {
-
- 		// TODO
-		return new MicroserviceAuthProvider(Arrays.asList(Object.class));
 	}
 }

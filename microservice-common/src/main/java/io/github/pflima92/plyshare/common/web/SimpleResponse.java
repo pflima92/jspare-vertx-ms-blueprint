@@ -28,17 +28,16 @@ public class SimpleResponse {
 		return this;
 	}
 
+	public ResponseInfo getResponseInfo() {
+		return responseInfo;
+	}
+
 	public String getSelf() {
 		return self;
 	}
 
-	public SimpleResponse setSelf(String self) {
-		this.self = self;
-		return this;
-	}
-
-	public ResponseInfo getResponseInfo() {
-		return responseInfo;
+	public Object getValue() {
+		return value;
 	}
 
 	public SimpleResponse setResponseInfo(ResponseInfo responseInfo) {
@@ -46,8 +45,9 @@ public class SimpleResponse {
 		return this;
 	}
 
-	public Object getValue() {
-		return value;
+	public SimpleResponse setSelf(String self) {
+		this.self = self;
+		return this;
 	}
 
 	public SimpleResponse setValue(Object value) {

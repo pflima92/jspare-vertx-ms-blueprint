@@ -23,13 +23,8 @@ public class LibrarySupport {
 	@Inject
 	private GatewayOptionsHolder gatewayOptionsHolder;
 
-	public void load() {
-
-		listFiles().forEach(this::addSoftwareLibrary);
-	}
-
 	@SneakyThrows
-	private void addSoftwareLibrary(File file) {
+	public void addSoftwareLibrary(File file) {
 		Method method = URLClassLoader.class.getDeclaredMethod("addURL", new Class[] { URL.class });
 		method.setAccessible(true);
 		method.invoke(ClassLoader.getSystemClassLoader(), new Object[] { file.toURI().toURL() });
@@ -43,5 +38,10 @@ public class LibrarySupport {
 			return Arrays.asList(file.listFiles()).stream().filter(f -> f.getName().endsWith("jar")).collect(Collectors.toList());
 		}
 		return Arrays.asList();
+	}
+
+	public void load() {
+
+		listFiles().forEach(this::addSoftwareLibrary);
 	}
 }

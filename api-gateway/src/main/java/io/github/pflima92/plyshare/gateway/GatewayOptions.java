@@ -26,6 +26,8 @@ import io.vertx.core.json.JsonObject;
 @DataObject(generateConverter = true)
 public class GatewayOptions extends MicroserviceOptions {
 
+	private static final boolean DEFAULT_AUDIT_OPTION = true;
+
 	private static final String DEFAULT_PROFILE = "default";
 
 	private static final long DEFAULT_PERIOD_HEALTH_CHECK = TimeUnit.SECONDS.toMillis(60l);
@@ -118,7 +120,7 @@ public class GatewayOptions extends MicroserviceOptions {
 		dashboardPort = DEFAULT_DASHBOARD_PORT;
 		httpServerOptions = new HttpServerOptions();
 		periodicHealthCheck = DEFAULT_PERIOD_HEALTH_CHECK;
-		audit = false;
+		audit = DEFAULT_AUDIT_OPTION;
 		libPath = DEFAULT_LIB_PATH;
 	}
 

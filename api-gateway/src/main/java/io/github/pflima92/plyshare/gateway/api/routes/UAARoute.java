@@ -11,6 +11,20 @@ import io.vertx.ext.web.RoutingContext;
 public class UAARoute extends RestAPIHandler {
 
 	@Auth
+	@Get("/gatekeeper")
+	@Handler
+	public void getGatekeeper(RoutingContext context) {
+
+		if (context.user() != null) {
+
+			success(context.user().principal());
+
+		} else {
+			unauthorized();
+		}
+	}
+
+	@Auth
 	@Post("/login")
 	@Handler
 	public void login(RoutingContext ctx) {
@@ -26,20 +40,6 @@ public class UAARoute extends RestAPIHandler {
 		ctx.clearUser();
 		ctx.session().destroy();
 		ctx.response().setStatusCode(204).end();
-	}
-
-	@Auth
-	@Get("/gatekeeper")
-	@Handler
-	public void getGatekeeper(RoutingContext context) {
-
-		if (context.user() != null) {
-
-			success(context.user().principal());
-
-		} else {
-			unauthorized();
-		}
 	}
 
 }

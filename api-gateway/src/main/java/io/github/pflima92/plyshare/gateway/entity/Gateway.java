@@ -59,59 +59,59 @@ public class Gateway extends Model {
 		GatewayConverter.fromJson(json, this);
 	}
 	
-	public JsonObject toJson(){
-		JsonObject json = new JsonObject();
-		GatewayConverter.toJson(this, json);
-		return json;
+	public String getBuild() {
+		return build;
 	}
 	
-	public String getProfile() {
-		return profile;
-	}
-	public Gateway setProfile(String profile) {
-		this.profile = profile;
-		return this;
-	}
-	public String getSerialKey() {
-		return serialKey;
-	}
-	public Gateway setSerialKey(String serialKey) {
-		this.serialKey = serialKey;
-		return this;
-	}
-	public String getPrivateKey() {
-		return privateKey;
-	}
-	public Gateway setPrivateKey(String privateKey) {
-		this.privateKey = privateKey;
-		return this;
+	public LocalDateTime getLastStarted() {
+		return lastStarted;
 	}
 	public String getOwner() {
 		return owner;
 	}
-	public Gateway setOwner(String owner) {
-		this.owner = owner;
-		return this;
+	public String getPrivateKey() {
+		return privateKey;
+	}
+	public String getProfile() {
+		return profile;
+	}
+	public String getSerialKey() {
+		return serialKey;
 	}
 	public String getVersion() {
 		return version;
-	}
-	public Gateway setVersion(String version) {
-		this.version = version;
-		return this;
-	}
-	public String getBuild() {
-		return build;
 	}
 	public Gateway setBuild(String build) {
 		this.build = build;
 		return this;
 	}
-	public LocalDateTime getLastStarted() {
-		return lastStarted;
-	}
 	public Gateway setLastStarted(LocalDateTime lastStarted) {
 		this.lastStarted = lastStarted;
 		return this;
+	}
+	public Gateway setOwner(String owner) {
+		this.owner = owner;
+		return this;
+	}
+	public Gateway setPrivateKey(String privateKey) {
+		this.privateKey = privateKey;
+		return this;
+	}
+	public Gateway setProfile(String profile) {
+		this.profile = profile;
+		return this;
+	}
+	public Gateway setSerialKey(String serialKey) {
+		this.serialKey = serialKey;
+		return this;
+	}
+	public Gateway setVersion(String version) {
+		this.version = version;
+		return this;
+	}
+	public JsonObject toJson(){
+		JsonObject json = new JsonObject();
+		GatewayConverter.toJson(this, json);
+		return json;
 	}
 }

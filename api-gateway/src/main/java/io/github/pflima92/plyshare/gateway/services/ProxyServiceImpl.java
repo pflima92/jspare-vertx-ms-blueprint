@@ -22,11 +22,21 @@ public class ProxyServiceImpl implements ProxyService {
 	@VertxInject
 	private Vertx vertx;
 
+	protected HttpServerResponse badGateway(HttpServerResponse httpSrvRes) {
+		return httpSrvRes.setStatusCode(502);
+	}
+
+	private String extractRequestUri(HttpServerRequest httpSrvReq, Record record) {
+		return httpSrvReq.uri().substring(String.format(PROXY_PATTERN, record.getName()).length());
+	}
+
 	@Override
-	public Future<Void> proxy(RoutingContext ctx, Record record, Buffer processedBuffer) {
+	public Future<Buffer> proxy(RoutingContext ctx, Record record, Buffer processedBuffer) {
 
 		// Create Proxy Future
-		Future<Void> future = Future.future();
+		Future<Buffer> future = Future.future();
+		final Buffer futureBuffer = Buffer.buffer();
+
 		// Get current request
 		HttpServerRequest httpSrvReq = ctx.request();
 		HttpServerResponse httpSrvRes = ctx.response();
@@ -43,13 +53,13 @@ public class ProxyServiceImpl implements ProxyService {
 			httpSrvRes.setStatusCode(httpClientRes.statusCode());
 			httpSrvRes.headers().setAll(httpClientRes.headers());
 			httpClientRes.handler(buffer -> {
-
+				futureBuffer.appendBuffer(buffer.copy());
 				httpSrvRes.write(buffer);
 			});
 			httpClientRes.exceptionHandler(future::fail);
 			httpClientRes.endHandler((v) -> {
 				httpSrvRes.end();
-				future.complete();
+				future.complete(futureBuffer);
 			});
 		});
 		
@@ -66,13 +76,5 @@ public class ProxyServiceImpl implements ProxyService {
 		httpClientReq.write(processedBuffer).end();
 
 		return future;
-	}
-
-	protected HttpServerResponse badGateway(HttpServerResponse httpSrvRes) {
-		return httpSrvRes.setStatusCode(502);
-	}
-
-	private String extractRequestUri(HttpServerRequest httpSrvReq, Record record) {
-		return httpSrvReq.uri().substring(String.format(PROXY_PATTERN, record.getName()).length());
 	}
 }

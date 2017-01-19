@@ -28,12 +28,6 @@ public class Gatekeeper extends AbstractUser {
 	}
 	
 	@Override
-	public JsonObject principal() {
-
-		return new JsonObject().put("username", username).put("permissions", permissions);
-	}
-
-	@Override
 	protected void doIsPermitted(String permission, Handler<AsyncResult<Boolean>> resultHandler) {
 
 		resultHandler.handle(Future.succeededFuture(permissions.contains(permission)));
@@ -43,21 +37,10 @@ public class Gatekeeper extends AbstractUser {
 		return username;
 	}
 
-	public Gatekeeper setUsername(String username) {
-		this.username = username;
-		return this;
-	}
-	
 	@Override
-	public void writeToBuffer(Buffer buff) {
-		 buff.appendInt(permissions == null ? 0 : permissions.size());
-		    if (permissions != null) {
-		      for (String entry : permissions) {
-		        byte[] bytes = entry.getBytes(StandardCharsets.UTF_8);
-		        buff.appendInt(bytes.length).appendBytes(bytes);
-		      }
-		    }
-		buff.appendInt(username.length()).appendBytes(username.getBytes());
+	public JsonObject principal() {
+
+		return new JsonObject().put("username", username).put("permissions", permissions);
 	}
 
 	@Override
@@ -76,5 +59,22 @@ public class Gatekeeper extends AbstractUser {
 		byte[] bytes = buffer.getBytes(pos, pos + len);
 		username = new String(bytes, StandardCharsets.UTF_8);
 		return pos;
+	}
+	
+	public Gatekeeper setUsername(String username) {
+		this.username = username;
+		return this;
+	}
+
+	@Override
+	public void writeToBuffer(Buffer buff) {
+		 buff.appendInt(permissions == null ? 0 : permissions.size());
+		    if (permissions != null) {
+		      for (String entry : permissions) {
+		        byte[] bytes = entry.getBytes(StandardCharsets.UTF_8);
+		        buff.appendInt(bytes.length).appendBytes(bytes);
+		      }
+		    }
+		buff.appendInt(username.length()).appendBytes(username.getBytes());
 	}
 }

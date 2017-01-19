@@ -39,10 +39,28 @@ public class APIGatewayVerticle extends MicroserviceVerticle {
 
 	protected GatewayOptions options;
 
-	@Override
-	public void start() throws Exception {
+	private void downHttpEndpoint(Record record){
 
-		super.start();
+		record.setStatus(Status.DOWN);
+		discovery.unpublish(record.getRegistration(), ar -> {
+				
+				log.debug("Publish to discovery to DOWN record: {} ", record);
+		});
+	}
+
+	/**
+	 * Get all REST endpoints from the service discovery infrastructure.
+	 *
+	 * @return async result
+	 */
+	private Future<List<Record>> getAllEndpoints() {
+		Future<List<Record>> future = Future.future();
+		discovery.getRecords(record -> record.getType().equals(HttpEndpoint.TYPE), future.completer());
+		return future;
+	}
+
+	private boolean healthStatus(int code) {
+		return code == 200;
 	}
 
 	@Override
@@ -59,8 +77,8 @@ public class APIGatewayVerticle extends MicroserviceVerticle {
 			log.debug(ReflectionToStringBuilder.toString(resultHandler.result(), ToStringStyle.MULTI_LINE_STYLE));
 
 			// Registry API Gateway verticles
-			deployVerticle(ProxyAPIVerticle.class);
 			deployVerticle(ServicesAPIVerticle.class);
+			deployVerticle(ProxyAPIVerticle.class);
 
 			// Registry Proxy Services
 			addProxyService(ConfigurationProvider.class);
@@ -80,44 +98,6 @@ public class APIGatewayVerticle extends MicroserviceVerticle {
 		super.registryResources();
 
 		registryResource(new GatewayOptionsHolder(options));
-	}
-
-	@Override
-	protected void setOptions() {
-
-		super.setOptions();
-
-		options = new GatewayOptions(config());
-	}
-
-	@Override
-	@SneakyThrows({ ClassNotFoundException.class })
-	protected void setProvidedConfiguration() {
-
-		my(LibrarySupport.class).load();
-
-		String persistanceClass = options.getGatewayDatabaseOptions().getDatabaseClass();
-		log.debug("Initialize GatewayPersistance with: ", persistanceClass);
-
-		registryComponent(Class.forName(persistanceClass));
-
-		Stopwatch stopwatch = Stopwatch.create().start("Initialized Database");
-		my(GatewayPersistance.class);
-		stopwatch.stop("Database initialized").print();
-
-		initialize();
-	}
-
-	protected void startHealthCheck() {
-
-		long period = options.getPeriodicHealthCheck();
-		vertx.setPeriodic(period, t -> {
-
-			circuitBreaker.execute(future -> {
-				// behind the circuit breaker
-				sendHeartBeatRequest().setHandler(future.completer());
-			});
-		});
 	}
 
 	@SuppressWarnings("rawtypes")
@@ -163,28 +143,48 @@ public class APIGatewayVerticle extends MicroserviceVerticle {
 		     });
 		});
 	}
-	
-	private void downHttpEndpoint(Record record){
 
-		record.setStatus(Status.DOWN);
-		discovery.unpublish(record.getRegistration(), ar -> {
-				
-				log.debug("Publish to discovery to DOWN record: {} ", record);
+	@Override
+	protected void setOptions() {
+
+		super.setOptions();
+
+		options = new GatewayOptions(config());
+	}
+	
+	@Override
+	@SneakyThrows({ ClassNotFoundException.class })
+	protected void setProvidedConfiguration() {
+
+		my(LibrarySupport.class).load();
+
+		String persistanceClass = options.getGatewayDatabaseOptions().getDatabaseClass();
+		log.debug("Initialize GatewayPersistance with: ", persistanceClass);
+
+		registryComponent(Class.forName(persistanceClass));
+
+		Stopwatch stopwatch = Stopwatch.create().start("Initialized Database");
+		my(GatewayPersistance.class);
+		stopwatch.stop("Database initialized").print();
+
+		initialize();
+	}
+
+	@Override
+	public void start() throws Exception {
+
+		super.start();
+	}
+	
+	protected void startHealthCheck() {
+
+		long period = options.getPeriodicHealthCheck();
+		vertx.setPeriodic(period, t -> {
+
+			circuitBreaker.execute(future -> {
+				// behind the circuit breaker
+				sendHeartBeatRequest().setHandler(future.completer());
+			});
 		});
-	}
-
-	/**
-	 * Get all REST endpoints from the service discovery infrastructure.
-	 *
-	 * @return async result
-	 */
-	private Future<List<Record>> getAllEndpoints() {
-		Future<List<Record>> future = Future.future();
-		discovery.getRecords(record -> record.getType().equals(HttpEndpoint.TYPE), future.completer());
-		return future;
-	}
-	
-	private boolean healthStatus(int code) {
-		return code == 200;
 	}
 }

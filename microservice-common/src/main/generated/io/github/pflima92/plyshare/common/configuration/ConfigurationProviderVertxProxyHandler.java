@@ -16,33 +16,22 @@
 
 package io.github.pflima92.plyshare.common.configuration;
 
-import io.github.pflima92.plyshare.common.configuration.ConfigurationProvider;
-import io.vertx.core.Vertx;
-import io.vertx.core.Handler;
-import io.vertx.core.AsyncResult;
-import io.vertx.core.eventbus.EventBus;
-import io.vertx.core.eventbus.Message;
-import io.vertx.core.eventbus.MessageConsumer;
-import io.vertx.core.eventbus.DeliveryOptions;
-import io.vertx.core.eventbus.ReplyException;
-import io.vertx.core.json.JsonObject;
-import io.vertx.core.json.JsonArray;
-import java.util.Collection;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.UUID;
-import java.util.stream.Collectors;
-import io.vertx.serviceproxy.ProxyHelper;
+
+import io.vertx.core.AsyncResult;
+import io.vertx.core.Handler;
+import io.vertx.core.Vertx;
+import io.vertx.core.eventbus.Message;
+import io.vertx.core.eventbus.MessageConsumer;
+import io.vertx.core.json.JsonArray;
+import io.vertx.core.json.JsonObject;
 import io.vertx.serviceproxy.ProxyHandler;
 import io.vertx.serviceproxy.ServiceException;
 import io.vertx.serviceproxy.ServiceExceptionMessageCodec;
-import io.github.pflima92.plyshare.common.configuration.ConfigurationProvider;
-import io.vertx.core.json.JsonObject;
-import io.vertx.core.AsyncResult;
-import io.vertx.core.Handler;
 
 /*
   Generated Proxy code - DO NOT EDIT
@@ -61,10 +50,6 @@ public class ConfigurationProviderVertxProxyHandler extends ProxyHandler {
 
   public ConfigurationProviderVertxProxyHandler(Vertx vertx, ConfigurationProvider service) {
     this(vertx, service, DEFAULT_CONNECTION_TIMEOUT);
-  }
-
-  public ConfigurationProviderVertxProxyHandler(Vertx vertx, ConfigurationProvider service, long timeoutInSecond) {
-    this(vertx, service, true, timeoutInSecond);
   }
 
   public ConfigurationProviderVertxProxyHandler(Vertx vertx, ConfigurationProvider service, boolean topLevel, long timeoutSeconds) {
@@ -87,10 +72,12 @@ public class ConfigurationProviderVertxProxyHandler extends ProxyHandler {
     accessed();
   }
 
-  public MessageConsumer<JsonObject> registerHandler(String address) {
-    MessageConsumer<JsonObject> consumer = vertx.eventBus().<JsonObject>consumer(address).handler(this);
-    this.setConsumer(consumer);
-    return consumer;
+  public ConfigurationProviderVertxProxyHandler(Vertx vertx, ConfigurationProvider service, long timeoutInSecond) {
+    this(vertx, service, true, timeoutInSecond);
+  }
+
+  private void accessed() {
+    this.lastAccessed = System.nanoTime();
   }
 
   private void checkTimedOut(long id) {
@@ -108,8 +95,98 @@ public class ConfigurationProviderVertxProxyHandler extends ProxyHandler {
     super.close();
   }
 
-  private void accessed() {
-    this.lastAccessed = System.nanoTime();
+  private <T> List<T> convertList(List list) {
+    return (List<T>)list;
+  }
+
+  private <T> Map<String, T> convertMap(Map map) {
+    return (Map<String, T>)map;
+  }
+
+  private <T> Set<T> convertSet(List list) {
+    return new HashSet<T>((List<T>)list);
+  }
+
+  private <T> Handler<AsyncResult<T>> createHandler(Message msg) {
+    return res -> {
+      if (res.failed()) {
+        if (res.cause() instanceof ServiceException) {
+          msg.reply(res.cause());
+        } else {
+          msg.reply(new ServiceException(-1, res.cause().getMessage()));
+        }
+      } else {
+        if (res.result() != null  && res.result().getClass().isEnum()) {
+          msg.reply(((Enum) res.result()).name());
+        } else {
+          msg.reply(res.result());
+        }
+      }
+    };
+  }
+
+  private Handler<AsyncResult<List<Character>>> createListCharHandler(Message msg) {
+    return res -> {
+      if (res.failed()) {
+        if (res.cause() instanceof ServiceException) {
+          msg.reply(res.cause());
+        } else {
+          msg.reply(new ServiceException(-1, res.cause().getMessage()));
+        }
+      } else {
+        JsonArray arr = new JsonArray();
+        for (Character chr: res.result()) {
+          arr.add((int) chr);
+        }
+        msg.reply(arr);
+      }
+    };
+  }
+
+  private <T> Handler<AsyncResult<List<T>>> createListHandler(Message msg) {
+    return res -> {
+      if (res.failed()) {
+        if (res.cause() instanceof ServiceException) {
+          msg.reply(res.cause());
+        } else {
+          msg.reply(new ServiceException(-1, res.cause().getMessage()));
+        }
+      } else {
+        msg.reply(new JsonArray(res.result()));
+      }
+    };
+  }
+
+  private Handler<AsyncResult<Set<Character>>> createSetCharHandler(Message msg) {
+    return res -> {
+      if (res.failed()) {
+        if (res.cause() instanceof ServiceException) {
+          msg.reply(res.cause());
+        } else {
+          msg.reply(new ServiceException(-1, res.cause().getMessage()));
+        }
+      } else {
+        JsonArray arr = new JsonArray();
+        for (Character chr: res.result()) {
+          arr.add((int) chr);
+        }
+        msg.reply(arr);
+      }
+    };
+  }
+
+  private <T> Handler<AsyncResult<Set<T>>> createSetHandler(Message msg) {
+    return res -> {
+      if (res.failed()) {
+        if (res.cause() instanceof ServiceException) {
+          msg.reply(res.cause());
+        } else {
+          msg.reply(new ServiceException(-1, res.cause().getMessage()));
+        }
+      } else {
+        msg.reply(new JsonArray(new ArrayList<>(res.result())));
+      }
+    };
   }
 
   public void handle(Message<JsonObject> msg) {
@@ -135,97 +212,9 @@ public class ConfigurationProviderVertxProxyHandler extends ProxyHandler {
     }
   }
 
-  private <T> Handler<AsyncResult<T>> createHandler(Message msg) {
-    return res -> {
-      if (res.failed()) {
-        if (res.cause() instanceof ServiceException) {
-          msg.reply(res.cause());
-        } else {
-          msg.reply(new ServiceException(-1, res.cause().getMessage()));
-        }
-      } else {
-        if (res.result() != null  && res.result().getClass().isEnum()) {
-          msg.reply(((Enum) res.result()).name());
-        } else {
-          msg.reply(res.result());
-        }
-      }
-    };
-  }
-
-  private <T> Handler<AsyncResult<List<T>>> createListHandler(Message msg) {
-    return res -> {
-      if (res.failed()) {
-        if (res.cause() instanceof ServiceException) {
-          msg.reply(res.cause());
-        } else {
-          msg.reply(new ServiceException(-1, res.cause().getMessage()));
-        }
-      } else {
-        msg.reply(new JsonArray(res.result()));
-      }
-    };
-  }
-
-  private <T> Handler<AsyncResult<Set<T>>> createSetHandler(Message msg) {
-    return res -> {
-      if (res.failed()) {
-        if (res.cause() instanceof ServiceException) {
-          msg.reply(res.cause());
-        } else {
-          msg.reply(new ServiceException(-1, res.cause().getMessage()));
-        }
-      } else {
-        msg.reply(new JsonArray(new ArrayList<>(res.result())));
-      }
-    };
-  }
-
-  private Handler<AsyncResult<List<Character>>> createListCharHandler(Message msg) {
-    return res -> {
-      if (res.failed()) {
-        if (res.cause() instanceof ServiceException) {
-          msg.reply(res.cause());
-        } else {
-          msg.reply(new ServiceException(-1, res.cause().getMessage()));
-        }
-      } else {
-        JsonArray arr = new JsonArray();
-        for (Character chr: res.result()) {
-          arr.add((int) chr);
-        }
-        msg.reply(arr);
-      }
-    };
-  }
-
-  private Handler<AsyncResult<Set<Character>>> createSetCharHandler(Message msg) {
-    return res -> {
-      if (res.failed()) {
-        if (res.cause() instanceof ServiceException) {
-          msg.reply(res.cause());
-        } else {
-          msg.reply(new ServiceException(-1, res.cause().getMessage()));
-        }
-      } else {
-        JsonArray arr = new JsonArray();
-        for (Character chr: res.result()) {
-          arr.add((int) chr);
-        }
-        msg.reply(arr);
-      }
-    };
-  }
-
-  private <T> Map<String, T> convertMap(Map map) {
-    return (Map<String, T>)map;
-  }
-
-  private <T> List<T> convertList(List list) {
-    return (List<T>)list;
-  }
-
-  private <T> Set<T> convertSet(List list) {
-    return new HashSet<T>((List<T>)list);
+  public MessageConsumer<JsonObject> registerHandler(String address) {
+    MessageConsumer<JsonObject> consumer = vertx.eventBus().<JsonObject>consumer(address).handler(this);
+    this.setConsumer(consumer);
+    return consumer;
   }
 }

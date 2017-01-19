@@ -15,22 +15,31 @@
  */
 package io.github.pflima92.plyshare.gateway.persistance;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.jspare.core.annotation.Component;
 
 import io.github.pflima92.plyshare.gateway.entity.Audit;
+import io.github.pflima92.plyshare.gateway.entity.Event;
 import io.github.pflima92.plyshare.gateway.entity.Gateway;
 import io.vertx.core.Future;
+import io.vertx.core.json.JsonObject;
 
 @Component
 public interface GatewayPersistance {
 
-	Future<Optional<Gateway>> findGateway(String profile);
+	Future<Optional<Audit>> findAuditByTid(String tid);
 
+	Future<Optional<Gateway>> findGateway(String profile);
+	
+	Future<List<Audit>> listAudit(JsonObject filter); 
+	
+	Future<Audit> persistAudit(Audit audit);
+	
 	Future<Gateway> persistGateway(Gateway gateway);
 	
-	Future<Audit> persistAudit(Audit audit); 
+	Future<Event> persisEvent(Event event);
 	
-	Future<Optional<Audit>> findAuditByTid(String tid);
+	Future<List<Event>> listEvents(JsonObject filter);
 }

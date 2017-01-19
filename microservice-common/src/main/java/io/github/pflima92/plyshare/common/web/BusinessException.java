@@ -40,11 +40,21 @@ public class BusinessException extends Exception {
 	/**
 	 * Instantiates a new business exception.
 	 *
-	 * @param exception
-	 *            the exception
+	 * @param reasons
+	 *            the reasons
 	 */
-	public BusinessException(Throwable exception) {
-		super(exception);
+	public BusinessException(List<Reason> reasons) {
+		this.reasons = reasons;
+	}
+
+	/**
+	 * Instantiates a new business exception.
+	 *
+	 * @param reason
+	 *            the reason
+	 */
+	public BusinessException(Reason reason) {
+		addReason(reason);
 	}
 
 	/**
@@ -61,21 +71,11 @@ public class BusinessException extends Exception {
 	/**
 	 * Instantiates a new business exception.
 	 *
-	 * @param reasons
-	 *            the reasons
+	 * @param exception
+	 *            the exception
 	 */
-	public BusinessException(List<Reason> reasons) {
-		this.reasons = reasons;
-	}
-
-	/**
-	 * Instantiates a new business exception.
-	 *
-	 * @param reason
-	 *            the reason
-	 */
-	public BusinessException(Reason reason) {
-		addReason(reason);
+	public BusinessException(Throwable exception) {
+		super(exception);
 	}
 
 	/**

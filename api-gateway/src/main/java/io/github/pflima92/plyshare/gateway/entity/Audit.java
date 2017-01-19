@@ -15,13 +15,20 @@
  */
 package io.github.pflima92.plyshare.gateway.entity;
 
+import java.sql.Blob;
+
 import javax.persistence.Column;
+import javax.persistence.Convert;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
+import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import io.vertx.codegen.annotations.DataObject;
 import io.vertx.core.json.JsonObject;
@@ -37,15 +44,43 @@ public class Audit extends Model {
 	 */
 	private static final long serialVersionUID = 1L;
 
+	@JsonIgnore
+	@ManyToOne(fetch=FetchType.LAZY)
+	@JoinColumn(name = "fk_gateway_id")
+	private Gateway gateway;	
+	
 	@Column
 	private String tid;
 	
 	@Column
+	private String alias;
+	
+	@Column
+	private String uri;
+	
+	@Column(columnDefinition = "TEXT")
+	@Convert(converter=JsonObjectConverter.class)
+	private JsonObject record;
+	
+	@Column(columnDefinition = "TEXT")
+	@Convert(converter=JsonObjectConverter.class)
+	private JsonObject headers;
+	
+	@JsonIgnore
+	@Lob
+	@Column(columnDefinition = "varbinary(MAX)")
+	private Blob requestContent;
+	
+	@JsonIgnore
+	@Lob
+	@Column(columnDefinition = "varbinary(MAX)")
+	private Blob responseContent;
+	
+	@Column
 	private int responseCode;
 	
-	@ManyToOne
-	@JoinColumn(name = "fk_gateway_id")
-	private Gateway gateway;
+	@Column(columnDefinition = "TEXT")
+	private String error;
 	
 	public Audit() {
 	}
@@ -54,23 +89,70 @@ public class Audit extends Model {
 		AuditConverter.fromJson(json, this);
 	}
 	
-	public JsonObject toJson(){
-		JsonObject json = new JsonObject();
-		AuditConverter.toJson(this, json);
-		return json;
+	public Gateway getGateway() {
+		return gateway;
+	}
+
+	public int getResponseCode() {
+		return responseCode;
 	}
 
 	public String getTid() {
 		return tid;
 	}
 
-	public Audit setTid(String tid) {
-		this.tid = tid;
+	public String getAlias() {
+		return alias;
+	}
+
+	public Audit setAlias(String alias) {
+		this.alias = alias;
 		return this;
 	}
 
-	public Gateway getGateway() {
-		return gateway;
+	public JsonObject getRecord() {
+		return record;
+	}
+
+	public Audit setRecord(JsonObject record) {
+		this.record = record;
+		return this;
+	}
+
+	public String getUri() {
+		return uri;
+	}
+
+	public Audit setUri(String uri) {
+		this.uri = uri;
+		return this;
+	}
+
+	public JsonObject getHeaders() {
+		return headers;
+	}
+
+	public Audit setHeaders(JsonObject headers) {
+		this.headers = headers;
+		return this;
+	}
+
+	public Blob getRequestContent() {
+		return requestContent;
+	}
+
+	public Audit setRequestContent(Blob requestContent) {
+		this.requestContent = requestContent;
+		return this;
+	}
+
+	public Blob getResponseContent() {
+		return responseContent;
+	}
+
+	public Audit setResponseContent(Blob responseContent) {
+		this.responseContent = responseContent;
+		return this;
 	}
 
 	public Audit setGateway(Gateway gateway) {
@@ -78,12 +160,28 @@ public class Audit extends Model {
 		return this;
 	}
 
-	public int getResponseCode() {
-		return responseCode;
-	}
-
 	public Audit setResponseCode(int responseCode) {
 		this.responseCode = responseCode;
 		return this;
+	}
+
+	public Audit setTid(String tid) {
+		this.tid = tid;
+		return this;
+	}
+
+	public String getError() {
+		return error;
+	}
+
+	public Audit setError(String error) {
+		this.error = error;
+		return this;
+	}
+
+	public JsonObject toJson(){
+		JsonObject json = new JsonObject();
+		AuditConverter.toJson(this, json);
+		return json;
 	}
 }

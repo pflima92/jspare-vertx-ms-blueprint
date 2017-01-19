@@ -38,22 +38,6 @@ public abstract class MicroserviceVerticle extends AbstractVerticle {
 	protected ServiceDiscovery discovery;
 	protected CircuitBreaker circuitBreaker;
 
-	@Override
-	public void start() throws Exception {
-
-		log.debug(
-				"We are using sl4j with logger of this application, for change any configuration use file: simplelogger.properties instead of http://www.slf4j.org/api/org/slf4j/impl/SimpleLogger.html");
-
-		// Set and hold options for use on this instance
-		setOptions();
-
-		// Registry resources on Container
-		registryResources();
-
-		// Set provided configuration from ConfigurationProvider
-		setProvidedConfiguration();
-	}
-
 	protected void addProxyService(Class<?> proxyServiceClass) {
 		ProxyServiceBuilder.create(vertx).addProxyService(proxyServiceClass).build();
 	}
@@ -61,49 +45,6 @@ public abstract class MicroserviceVerticle extends AbstractVerticle {
 	protected CircuitBreaker createCircuitBreaker() {
 
 		return CircuitBreaker.create("circuit-breaker", vertx, new CircuitBreakerOptions(options.getCircuitBreakerOptions()));
-	}
-
-	protected Future<Record> publishJDBCDataSource(String name, JsonObject location) {
-
-		Record record = JDBCDataSource.createRecord(name, location, new JsonObject());
-		return publish(record); 
-	}
-
-	protected Future<Record> publishEventBusServiceEndpoint(String name, String address, Class<?> serviceClass) {
-		Record record = EventBusService.createRecord(name, address, serviceClass);
-		return publish(record);
-	}
-
-	protected Future<Record> publishHttpEndpoint(Integer port, boolean ssl) {
-
-		String address = getAddress();
-
-		RecordMetadata metadata = new RecordMetadata().setName(getAPIName()).setHealthPathCheck(options.getHealthPathCheck())
-				.setHealthCheck(options.isHealthCheck());
-
-		Record record = HttpEndpoint.createRecord(getAPIName(), ssl, address, port, ROOT, metadata.toJson());
-		return publish(record);
-	}
-
-	protected Future<Record> publishMessageSourceEndpoint(String name, String address) {
-
-		Record record = MessageSource.createRecord(name, address);
-		return publish(record);
-	}
-	
-	protected Future<Record> publish(Record record) {
-
-		Future<Record> future = Future.future();
-		// publish the service
-		discovery.publish(record, ar -> {
-			if (ar.succeeded()) {
-				future.complete(ar.result());
-			} else {
-				future.fail(ar.cause());
-			}
-		});
-
-		return future;
 	}
 
 	protected ServiceDiscovery createServiceDiscovery() {
@@ -129,7 +70,7 @@ public abstract class MicroserviceVerticle extends AbstractVerticle {
 
 		return options.getAddress();
 	}
-
+	
 	protected String getAPIName() {
 
 		return options.getName();
@@ -149,6 +90,49 @@ public abstract class MicroserviceVerticle extends AbstractVerticle {
 	}
 
 	protected abstract void initialize();
+
+	protected Future<Record> publish(Record record) {
+
+		Future<Record> future = Future.future();
+		// publish the service
+		discovery.publish(record, ar -> {
+			if (ar.succeeded()) {
+				future.complete(ar.result());
+			} else {
+				future.fail(ar.cause());
+			}
+		});
+
+		return future;
+	}
+
+	protected Future<Record> publishEventBusServiceEndpoint(String name, String address, Class<?> serviceClass) {
+		Record record = EventBusService.createRecord(name, address, serviceClass);
+		return publish(record);
+	}
+
+	protected Future<Record> publishHttpEndpoint(Integer port, boolean ssl) {
+
+		String address = getAddress();
+
+		RecordMetadata metadata = new RecordMetadata().setName(getAPIName()).setHealthPathCheck(options.getHealthPathCheck())
+				.setHealthCheck(options.isHealthCheck());
+
+		Record record = HttpEndpoint.createRecord(getAPIName(), ssl, address, port, ROOT, metadata.toJson());
+		return publish(record);
+	}
+
+	protected Future<Record> publishJDBCDataSource(String name, JsonObject location) {
+
+		Record record = JDBCDataSource.createRecord(name, location, new JsonObject());
+		return publish(record); 
+	}
+
+	protected Future<Record> publishMessageSourceEndpoint(String name, String address) {
+
+		Record record = MessageSource.createRecord(name, address);
+		return publish(record);
+	}
 
 	protected void registryResources() {
 
@@ -199,6 +183,22 @@ public abstract class MicroserviceVerticle extends AbstractVerticle {
 		String name = getName();
 		ProxyHelper.createProxy(ConfigurationProvider.class, vertx, ConfigurationProvider.SERVICE_NAME).getConfiguration(name,
 				this::setConfiguration);
+	}
+
+	@Override
+	public void start() throws Exception {
+
+		log.debug(
+				"We are using sl4j with logger of this application, for change any configuration use file: simplelogger.properties instead of http://www.slf4j.org/api/org/slf4j/impl/SimpleLogger.html");
+
+		// Set and hold options for use on this instance
+		setOptions();
+
+		// Registry resources on Container
+		registryResources();
+
+		// Set provided configuration from ConfigurationProvider
+		setProvidedConfiguration();
 	}
 
 }

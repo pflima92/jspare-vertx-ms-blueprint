@@ -24,6 +24,7 @@ import io.github.pflima92.plyshare.gateway.GatewayOptionsHolder;
 import io.github.pflima92.plyshare.gateway.entity.Gateway;
 import io.github.pflima92.plyshare.gateway.persistance.GatewayPersistance;
 import io.vertx.core.Future;
+import lombok.Getter;
 
 public class GatewayManagerImpl implements GatewayManager {
 
@@ -33,7 +34,8 @@ public class GatewayManagerImpl implements GatewayManager {
 	@Inject
 	private GatewayOptionsHolder gatewayOptionsHolder;
 	
-	private Gateway gateway;
+	@Getter
+	private Gateway currentGateway;
 
 	@Override
 	public Future<Optional<Gateway>> findGateway(String profile) {
@@ -44,12 +46,6 @@ public class GatewayManagerImpl implements GatewayManager {
 	private String getBuild() {
 
 		return "DEV-MODE";
-	}
-
-	@Override
-	public Gateway getCurrentGateway() {
-		// TODO Auto-generated method stub
-		return null;
 	}
 
 	protected void install(Future<Gateway> future) {
@@ -67,7 +63,7 @@ public class GatewayManagerImpl implements GatewayManager {
 		persistance.persistGateway(gateway).setHandler(res -> {
 
 			if (res.succeeded() && res.result() != null) {
-				this.gateway = gateway;
+				this.currentGateway = gateway;
 				future.complete(gateway);
 			} else {
 				future.fail(res.cause());
@@ -83,8 +79,8 @@ public class GatewayManagerImpl implements GatewayManager {
 
 			if (oGateway.isPresent()) {
 
-				gateway = oGateway.get();
-				future.complete(gateway);
+				currentGateway = oGateway.get();
+				future.complete(currentGateway);
 			} else {
 
 				install(future);

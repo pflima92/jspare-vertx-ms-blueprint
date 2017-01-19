@@ -13,5 +13,5 @@ public interface ProxyService {
 
 	String PROXY_PATTERN = "/api/%s";
 
-	Future<Void> proxy(RoutingContext ctx, Record record, Buffer processedBuffer);
+	Future<Buffer> proxy(RoutingContext ctx, Record record, Buffer processedBuffer);
 }

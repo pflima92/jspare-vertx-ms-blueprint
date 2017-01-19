@@ -10,7 +10,21 @@
 ^|Name | Type ^| Description
 |[[gateway]]`gateway`|`link:dataobjects.html#Gateway[Gateway]`|-
 |[[id]]`id`|`Number (int)`|-
+|[[responseCode]]`responseCode`|`Number (int)`|-
 |[[tid]]`tid`|`String`|-
+|===
+
+[[Event]]
+== Event
+
+
+[cols=">25%,^25%,50%"]
+[frame="topbot"]
+|===
+^|Name | Type ^| Description
+|[[content]]`content`|`Json object`|-
+|[[gateway]]`gateway`|`link:dataobjects.html#Gateway[Gateway]`|-
+|[[id]]`id`|`Number (int)`|-
 |===
 
 [[Gateway]]
