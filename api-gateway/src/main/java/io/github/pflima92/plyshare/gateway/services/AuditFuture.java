@@ -1,4 +1,4 @@
-package io.github.pflima92.plyshare.gateway.api.routes;
+package io.github.pflima92.plyshare.gateway.services;
 
 import java.util.Optional;
 
@@ -13,7 +13,6 @@ import io.github.pflima92.plyshare.common.web.Header;
 import io.github.pflima92.plyshare.gateway.GatewayOptionsHolder;
 import io.github.pflima92.plyshare.gateway.entity.Audit;
 import io.github.pflima92.plyshare.gateway.manager.GatewayManager;
-import io.github.pflima92.plyshare.gateway.services.AuditService;
 import io.vertx.codegen.annotations.Nullable;
 import io.vertx.core.AsyncResult;
 import io.vertx.core.Future;
@@ -58,8 +57,7 @@ public class AuditFuture extends MySupport {
 
 	private void persist(Audit audit, Handler<AsyncResult<Audit>> resultHandler) {
 		// Skip audit if disabled
-		if (!isAuditEnabled())
-			return;
+		if (!isAuditEnabled()) return;
 
 		workerExecutor.executeBlocking(future -> {
 			auditService.save(audit, res -> {

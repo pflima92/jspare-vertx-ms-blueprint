@@ -8,6 +8,7 @@ import org.jspare.vertx.web.annotation.method.All;
 
 import io.github.pflima92.plyshare.common.circuitbreaker.CircuitBreakerHolder;
 import io.github.pflima92.plyshare.common.web.RestAPIHandler;
+import io.github.pflima92.plyshare.gateway.services.AuditFuture;
 import io.github.pflima92.plyshare.gateway.services.LoadBalanceService;
 import io.github.pflima92.plyshare.gateway.services.ProxyService;
 import io.vertx.core.AsyncResult;
@@ -39,14 +40,14 @@ public class GatewayProxyRoute extends RestAPIHandler {
 
 	private void dispatchRequest(Buffer buffer, String alias) {
 
-		circuitBreaker.execute(future -> loadBalance.getRecord(alias, ar -> doDispatch(future, buffer, ar))).setHandler(ar -> {
-			
-			if (ar.failed() && !res.closed()) {
-
-				// TODO notify error
-				badGateway(ar.cause());
-			}
-		});
+		circuitBreaker.execute(future -> loadBalance.getRecord(alias, ar -> doDispatch(future, buffer, ar)))
+			.setHandler(ar -> {
+				
+				if (ar.failed() && !res.closed()) {
+	
+					badGateway(ar.cause());
+				}
+			});
 	}
 
 	private <T> void doDispatch(Future<T> future, Buffer buffer, AsyncResult<Record> resultHandler) {

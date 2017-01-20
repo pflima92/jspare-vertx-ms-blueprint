@@ -1,5 +1,19 @@
 {
-  "name": "utility",
-  "address": "localhost",
-  "port": 0
+	"name": "utility",
+	"address": "localhost",
+	"port": 0,
+	"healthCheck": true,
+	"healthPathCheck": "/health",
+	"vertx": {
+		
+	},
+	"circuitBreakerOptions": {
+		
+	},
+	"serviceDiscoveryOptions": {
+		
+	},
+	"config": {
+		
+	}
 }

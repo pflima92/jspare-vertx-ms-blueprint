@@ -20,6 +20,7 @@ import io.vertx.servicediscovery.Record;
 public class LoadBalanceServiceImpl implements LoadBalanceService {
 
 	private static final Reason RECORD_NOT_FOUND_REASON = Reason.error("record_not_found").detail("Record not found");
+	
 	@Inject
 	private ServiceDiscoveryHolder serviceDiscovery;
 

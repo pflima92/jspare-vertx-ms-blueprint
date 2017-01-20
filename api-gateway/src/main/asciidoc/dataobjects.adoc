@@ -8,10 +8,15 @@
 [frame="topbot"]
 |===
 ^|Name | Type ^| Description
+|[[alias]]`alias`|`String`|-
+|[[error]]`error`|`String`|-
 |[[gateway]]`gateway`|`link:dataobjects.html#Gateway[Gateway]`|-
+|[[headers]]`headers`|`Json object`|-
 |[[id]]`id`|`Number (int)`|-
+|[[record]]`record`|`Json object`|-
 |[[responseCode]]`responseCode`|`Number (int)`|-
 |[[tid]]`tid`|`String`|-
+|[[uri]]`uri`|`String`|-
 |===
 
 [[Event]]

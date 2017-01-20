@@ -1,11 +1,39 @@
 {
-	"profile" : "plyshare",
-	"owner" : "plyshare",
-	"periodicHealthCheck" : 5000,
-	"audit" : true,
-	"vertx" :{
-		"options" : {
-			"maxEventLoopExecuteTime" : 10000000000
+	"profile": "plyshare",
+	"owner": "plyshare",
+	"serialKey": "",
+	"apiPort": 9000,
+	"proxyPort": 9080,
+	"dashboardPort": 9009,
+	"periodicHealthCheck": 5000,
+	"libPath": "lib",
+	"audit": true,
+	"gatewayDatabaseOptions": {
+		"databaseClass": "io.github.pflima92.plyshare.gateway.persistance.jdbc.GatewayPersistanceJDBC",
+		"url": "jdbc:h2:~/test",
+		"driverClass": "org.h2.Driver",
+		"username": "",
+		"password": "",
+		"maxPool": 15,
+		"minPool": 1,
+		"initialPool": 1,
+		"maxIdleTime": 0,
+		"maxStatementsPerConnection": 0,
+		"showCommands": true,
+		"testConnection": true
+	},
+	"vertx": {
+		"options": {
+			"maxEventLoopExecuteTime": 10000000000
 		}
+	},
+	"circuitBreakerOptions": {
+		
+	},
+	"serviceDiscoveryOptions": {
+		
+	},
+	"config": {
+		
 	}
 }
