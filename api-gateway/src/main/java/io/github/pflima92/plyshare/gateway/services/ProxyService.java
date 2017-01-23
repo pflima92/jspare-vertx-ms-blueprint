@@ -11,7 +11,7 @@ import io.vertx.servicediscovery.Record;
 @Component
 public interface ProxyService {
 
-	String PROXY_PATTERN = "/api/%s";
+	String PROXY_PATTERN = "/proxy/%s";
 
 	Future<Buffer> proxy(RoutingContext ctx, Record record, Buffer processedBuffer);
 }

@@ -20,8 +20,10 @@ import io.github.pflima92.plyshare.common.discovery.RecordMetadata;
 import io.github.pflima92.plyshare.gateway.api.ProxyAPIVerticle;
 import io.github.pflima92.plyshare.gateway.api.ServicesAPIVerticle;
 import io.github.pflima92.plyshare.gateway.entity.Gateway;
+import io.github.pflima92.plyshare.gateway.ext.impl.BasicAuthAdapterImpl;
 import io.github.pflima92.plyshare.gateway.library.LibrarySupport;
 import io.github.pflima92.plyshare.gateway.manager.GatewayManager;
+import io.github.pflima92.plyshare.gateway.manager.SecurityManagerImpl;
 import io.github.pflima92.plyshare.gateway.persistance.GatewayPersistance;
 import io.github.pflima92.plyshare.gateway.utils.Stopwatch;
 import io.vertx.core.AsyncResult;
@@ -65,7 +67,7 @@ public class APIGatewayVerticle extends MicroserviceVerticle {
 
 	@Override
 	protected void initialize() {
-
+		
 		my(GatewayManager.class).setup().setHandler(this::onPrepare);
 	}
 
@@ -76,6 +78,9 @@ public class APIGatewayVerticle extends MicroserviceVerticle {
 			log.debug("API Gateway Core initialized with success");
 			log.debug(ReflectionToStringBuilder.toString(resultHandler.result(), ToStringStyle.MULTI_LINE_STYLE));
 
+			
+			registryComponent(new SecurityManagerImpl(new BasicAuthAdapterImpl()));
+			
 			// Registry API Gateway verticles
 			deployVerticle(ServicesAPIVerticle.class);
 			deployVerticle(ProxyAPIVerticle.class);

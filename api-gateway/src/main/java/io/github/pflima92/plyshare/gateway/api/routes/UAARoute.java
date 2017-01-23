@@ -38,9 +38,13 @@ public class UAARoute extends RestAPIHandler {
 
 	@Post("/login")
 	@Handler
-	public void login(AuthRequest authRequest) {
+	public void login() {
+		
+		context.request().handler(buffer -> {
+			
+			securityManager.execute(buffer.toJsonObject(), this::handleAuthentication);
+		});
 
-		securityManager.execute(authRequest.toJson(), this::handleAuthentication);
 	}
 
 	private void handleAuthentication(AsyncResult<JsonObject> resultHandler) {
@@ -50,16 +54,11 @@ public class UAARoute extends RestAPIHandler {
 			return;
 		}
 
-		JsonObject custom = vertx.getOrCreateContext().config().getJsonObject("jwtOptions", new JsonObject().put("expiresInSeconds", 60));
+		JsonObject jwtOptions = vertx.getOrCreateContext().config().getJsonObject("jwtOptions", new JsonObject().put("expiresInSeconds", 60));
+		JWTOptions options = new JWTOptions().setExpiresInSeconds(jwtOptions.getLong("expiresInSeconds"));
 
-		JWTOptions options = new JWTOptions().setExpiresInSeconds(custom.getLong("expiresInSeconds"));
-
-		for (int i = 0; i < 200; i++) {
-			options.addPermission("teste:" + i);
-		}
-
-		JsonObject json = new JsonObject().put("username", "Paulo Ferreira");
-		String jwt = jwtAuth.getJWTAuth().generateToken(json, options);
+		JsonObject user = resultHandler.result();
+		String jwt = jwtAuth.getJWTAuth().generateToken(user, options);
 		success(new JsonObject().put("jwt", jwt));
 	}
 }
