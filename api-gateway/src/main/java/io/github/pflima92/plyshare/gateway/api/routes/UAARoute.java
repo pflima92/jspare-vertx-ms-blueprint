@@ -8,7 +8,6 @@ import org.jspare.vertx.web.annotation.method.Post;
 
 import io.github.pflima92.plyshare.common.web.RestAPIHandler;
 import io.github.pflima92.plyshare.common.web.auth.JWTAuthFactory;
-import io.github.pflima92.plyshare.gateway.api.model.AuthRequest;
 import io.github.pflima92.plyshare.gateway.manager.SecurityManager;
 import io.vertx.core.AsyncResult;
 import io.vertx.core.json.JsonObject;
