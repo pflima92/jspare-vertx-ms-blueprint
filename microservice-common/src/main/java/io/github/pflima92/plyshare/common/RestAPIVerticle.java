@@ -3,6 +3,8 @@
  */
 package io.github.pflima92.plyshare.common;
 
+import static org.jspare.core.container.Environment.my;
+
 import org.jspare.core.annotation.Inject;
 import org.jspare.vertx.web.builder.HttpServerBuilder;
 import org.jspare.vertx.web.builder.RouterBuilder;
@@ -10,12 +12,15 @@ import org.jspare.vertx.web.builder.RouterBuilder;
 import io.github.pflima92.plyshare.common.circuitbreaker.CircuitBreakerHolder;
 import io.github.pflima92.plyshare.common.discovery.ServiceDiscoveryHolder;
 import io.github.pflima92.plyshare.common.environment.CommonExitCode;
+import io.github.pflima92.plyshare.common.web.auth.JWTAuthFactory;
 import io.vertx.core.AsyncResult;
 import io.vertx.core.Future;
 import io.vertx.core.http.HttpServer;
 import io.vertx.core.http.HttpServerOptions;
 import io.vertx.core.json.JsonObject;
 import io.vertx.ext.web.Router;
+import io.vertx.ext.web.handler.AuthHandler;
+import io.vertx.ext.web.handler.JWTAuthHandler;
 import io.vertx.servicediscovery.Record;
 import lombok.extern.slf4j.Slf4j;
 
@@ -58,17 +63,21 @@ public abstract class RestAPIVerticle extends MicroserviceVerticle {
 
 		String address = getAddress();
 		Integer port = getApiPort();
-
+		
+		setup();
+		
 		HttpServerBuilder.create(vertx).router(router).httpServerOptions(httpServerOptions()).build().listen(port, address,
 				this::onHttpServer);
 	}
 
+	protected void setup() {
+	}
+
 	protected void onHttpServer(AsyncResult<HttpServer> resultHandler) {
 
-		log.info("{} HttpServer listening at port {}", getAPIName(), resultHandler.result().actualPort());
-		
 		if (resultHandler.succeeded()) {
 
+			log.info("{} HttpServer listening at port {}", getAPIName(), resultHandler.result().actualPort());
 			publishHttpEndpoint(resultHandler.result().actualPort(), httpServerOptions().isSsl()).setHandler(this::onPublish);
 		} else {
 
@@ -125,5 +134,10 @@ public abstract class RestAPIVerticle extends MicroserviceVerticle {
 				future.complete();
 			}
 		});
+	}
+	
+	protected AuthHandler authHandler(){
+		
+		return JWTAuthHandler.create(my(JWTAuthFactory.class).getJWTAuth());
 	}
 }

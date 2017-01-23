@@ -79,7 +79,7 @@ public class APIGatewayVerticle extends MicroserviceVerticle {
 			// Registry API Gateway verticles
 			deployVerticle(ServicesAPIVerticle.class);
 			deployVerticle(ProxyAPIVerticle.class);
-
+			
 			// Registry Proxy Services
 			addProxyService(ConfigurationProvider.class);
 

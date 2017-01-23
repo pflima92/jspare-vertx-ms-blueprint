@@ -19,6 +19,18 @@
 |[[uri]]`uri`|`String`|-
 |===
 
+[[AuthRequest]]
+== AuthRequest
+
+
+[cols=">25%,^25%,50%"]
+[frame="topbot"]
+|===
+^|Name | Type ^| Description
+|[[password]]`password`|`String`|-
+|[[username]]`username`|`String`|-
+|===
+
 [[Event]]
 == Event
 

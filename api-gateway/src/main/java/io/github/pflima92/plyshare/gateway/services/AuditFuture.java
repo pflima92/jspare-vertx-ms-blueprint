@@ -9,7 +9,7 @@ import org.jspare.core.annotation.Inject;
 import org.jspare.core.container.MySupport;
 import org.jspare.vertx.annotation.VertxInject;
 
-import io.github.pflima92.plyshare.common.web.Header;
+import io.github.pflima92.plyshare.common.web.HttpHeaders;
 import io.github.pflima92.plyshare.gateway.GatewayOptionsHolder;
 import io.github.pflima92.plyshare.gateway.entity.Audit;
 import io.github.pflima92.plyshare.gateway.manager.GatewayManager;
@@ -86,7 +86,7 @@ public class AuditFuture extends MySupport {
 	
 	private String getTid() {
 		
-		return context.request().getHeader(Header.TID.value());
+		return context.request().getHeader(HttpHeaders.TID);
 	}
 
 	@SneakyThrows

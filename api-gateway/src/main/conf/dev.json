@@ -35,5 +35,15 @@
 	},
 	"config": {
 		
+	},
+	"jwtAuth" : {
+		"keyStore" : {
+			"path" : "keystore.jceks",
+			"type" : "jceks",
+			"password" : "secret"
+		}
+	},
+	"jwtOptions" : {
+		"expiresInSeconds" : 60
 	}
 }

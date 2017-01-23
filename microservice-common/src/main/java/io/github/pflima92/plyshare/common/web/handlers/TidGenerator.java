@@ -1,7 +1,7 @@
 /*
  *
  */
-package io.github.pflima92.plyshare.gateway.api.handlers;
+package io.github.pflima92.plyshare.common.web.handlers;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;

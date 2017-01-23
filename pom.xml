@@ -57,6 +57,8 @@
 		<lombok.version>1.16.12</lombok.version>
 		<logback.version>1.1.8</logback.version>
 		<junit.version>4.12</junit.version>
+		<vertx.version>3.3.3</vertx.version>
+		<vertx.jspare.version>1.0.0-SNAPSHOT</vertx.jspare.version>
 	</properties>
 
 	<build>
@@ -174,9 +176,73 @@
 		</dependency>
 
 	</dependencies>
-	
+
+	<dependencyManagement>
+
+		<dependencies>
+
+			<!-- Jspare Framework -->
+
+			<dependency>
+				<groupId>org.jspare.vertx</groupId>
+				<artifactId>vertx-jspare</artifactId>
+				<version>${vertx.jspare.version}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>org.jspare.vertx</groupId>
+				<artifactId>vertx-jspare-web</artifactId>
+				<version>${vertx.jspare.version}</version>
+			</dependency>
+
+			<!-- Vert.x -->
+			<dependency>
+				<groupId>io.vertx</groupId>
+				<artifactId>vertx-auth-oauth2</artifactId>
+				<version>${vertx.version}</version>
+				<optional>true</optional>
+			</dependency>
+
+			<dependency>
+				<groupId>io.vertx</groupId>
+				<artifactId>vertx-auth-jwt</artifactId>
+				<version>${vertx.version}</version>
+			</dependency>
+
+			<!-- Enable Vertx Codegen -->
+			<dependency>
+				<groupId>io.vertx</groupId>
+				<artifactId>vertx-codegen</artifactId>
+				<version>${vertx.version}</version>
+				<scope>provided</scope>
+			</dependency>
+
+			<!-- Service Discovery -->
+			<dependency>
+				<groupId>io.vertx</groupId>
+				<artifactId>vertx-service-discovery</artifactId>
+				<version>${vertx.version}</version>
+			</dependency>
+
+			<!-- Circuit Breaker -->
+			<dependency>
+				<groupId>io.vertx</groupId>
+				<artifactId>vertx-circuit-breaker</artifactId>
+				<version>${vertx.version}</version>
+			</dependency>
+
+			<!-- Hazelcast -->
+			<dependency>
+				<groupId>io.vertx</groupId>
+				<artifactId>vertx-hazelcast</artifactId>
+				<version>${vertx.version}</version>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
+
 	<modules>
 		<module>microservice-common</module>
+		<module>gateway-ext</module>
 		<module>api-gateway</module>
 		<module>utility-microservice</module>
 		<module>account-microservice</module>

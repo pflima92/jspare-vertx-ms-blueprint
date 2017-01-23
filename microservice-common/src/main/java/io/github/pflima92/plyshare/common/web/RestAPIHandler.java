@@ -17,7 +17,7 @@ import lombok.extern.slf4j.Slf4j;
 public abstract class RestAPIHandler extends APIHandler {
 
 	protected String getTid(){
-		return getHeader(Header.TID.value()).orElse(StringUtils.EMPTY);
+		return getHeader(HttpHeaders.TID).orElse(StringUtils.EMPTY);
 	}
 	
 	@SuppressWarnings("rawtypes")

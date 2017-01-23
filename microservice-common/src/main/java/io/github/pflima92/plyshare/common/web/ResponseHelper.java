@@ -18,7 +18,7 @@ public class ResponseHelper {
 	 */
 	public static SimpleResponse create(RoutingContext ctx) {
 		
-		String self = ctx.request().getHeader(Header.GATEWAY_ORIGIN.value());
+		String self = ctx.request().getHeader(HttpHeaders.GATEWAY_ORIGIN);
 		if(StringUtils.isEmpty(self)){
 			self = ctx.request().absoluteURI();
 		}

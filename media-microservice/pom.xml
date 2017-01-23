@@ -13,7 +13,7 @@
 
 	<groupId>io.github.pflima92.plyshare.microservice</groupId>
 	<artifactId>media-microservice</artifactId>
-	
+
 	<build>
 		<pluginManagement>
 			<plugins>
@@ -54,21 +54,20 @@
 	</build>
 
 	<dependencies>
-	
+
+		<!-- Enable Vertx Codegen -->
+		<dependency>
+			<groupId>io.vertx</groupId>
+			<artifactId>vertx-codegen</artifactId>
+			<scope>provided</scope>
+		</dependency>
+
 		<dependency>
 			<groupId>io.github.pflima92.plyshare</groupId>
 			<artifactId>microservice-common</artifactId>
 			<version>${project.version}</version>
 		</dependency>
-		
-		<!-- Enable Vertx Codegen -->
-		<dependency>
-			<groupId>io.vertx</groupId>
-			<artifactId>vertx-codegen</artifactId>
-			<version>3.3.3</version>
-			<scope>provided</scope>
-		</dependency>
-		
+
 	</dependencies>
 
 </project>

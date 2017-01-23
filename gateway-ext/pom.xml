@@ -9,7 +9,10 @@
 	</parent>
 
 	<modelVersion>4.0.0</modelVersion>
-	<artifactId>gateway-support</artifactId>
+	<artifactId>gateway-ext</artifactId>
+	
+	<name>Gateway Extensions</name>
+	<description>Allow extensions to API Gateway</description>
 
 	<dependencies>
 
@@ -17,9 +20,15 @@
 		<dependency>
 			<groupId>org.jspare.vertx</groupId>
 			<artifactId>vertx-jspare-web</artifactId>
-			<version>1.0.0-SNAPSHOT</version>
+			<scope>provided</scope>
+		</dependency>
+		
+		<dependency>
+			<groupId>io.vertx</groupId>
+			<artifactId>vertx-codegen</artifactId>
 			<scope>provided</scope>
 		</dependency>
 
 	</dependencies>
+	
 </project>

@@ -13,11 +13,11 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package io.github.pflima92.plyshare.gateway.api.handlers;
+package io.github.pflima92.plyshare.common.web.handlers;
 
 import org.apache.commons.lang.StringUtils;
 
-import io.github.pflima92.plyshare.common.web.Header;
+import io.github.pflima92.plyshare.common.web.HttpHeaders;
 import io.vertx.core.Handler;
 import io.vertx.ext.web.RoutingContext;
 import lombok.extern.slf4j.Slf4j;
@@ -33,13 +33,13 @@ public class TidHandler implements Handler<RoutingContext> {
 	@Override
 	public void handle(RoutingContext ctx) {
 
-		String tid = ctx.request().getHeader(Header.TID.value());
+		String tid = ctx.request().getHeader(HttpHeaders.TID);
 		if (StringUtils.isEmpty(tid)) {
 			tid = TidGenerator.generate();
-			ctx.put(Header.TID.value(), tid);
-			ctx.request().headers().add(Header.TID.value(), tid);
-			ctx.request().headers().add(Header.GATEWAY_ORIGIN.value(), ctx.request().absoluteURI());
-			ctx.response().putHeader(Header.TID.value(), tid);
+			ctx.put(HttpHeaders.TID, tid);
+			ctx.request().headers().add(HttpHeaders.TID, tid);
+			ctx.request().headers().add(HttpHeaders.GATEWAY_ORIGIN, ctx.request().absoluteURI());
+			ctx.response().putHeader(HttpHeaders.TID, tid);
 			if (log.isDebugEnabled()) {
 
 				log.debug("Received request to [{}] with TID [{}]", ctx.request().uri(), tid);

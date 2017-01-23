@@ -1,4 +1,4 @@
-package io.github.pflima92.plyshare.gateway.support;
+package io.github.pflima92.plyshare.gateway.ext;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -7,6 +7,6 @@ import java.lang.annotation.Target;
 
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.TYPE)
-public @interface GatewayVerticle {
+public @interface ProxyRoute {
 
 }

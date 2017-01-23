@@ -84,7 +84,6 @@
 		<dependency>
 			<groupId>io.vertx</groupId>
 			<artifactId>vertx-codegen</artifactId>
-			<version>3.3.3</version>
 			<scope>provided</scope>
 		</dependency>
 
@@ -94,6 +93,14 @@
 			<artifactId>microservice-common</artifactId>
 			<version>${project.version}</version>
 		</dependency>
+
+
+		<dependency>
+			<groupId>io.github.pflima92.plyshare</groupId>
+			<artifactId>gateway-ext</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+
 
 		<!-- Mongo Client -->
 		<dependency>

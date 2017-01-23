@@ -56,28 +56,24 @@
 		<dependency>
 			<groupId>org.jspare.vertx</groupId>
 			<artifactId>vertx-jspare-web</artifactId>
-			<version>1.0.0-SNAPSHOT</version>
 		</dependency>
 
 		<!-- Vertx OAuth -->
 		<dependency>
 			<groupId>io.vertx</groupId>
 			<artifactId>vertx-auth-oauth2</artifactId>
-			<version>3.3.3</version>
 			<optional>true</optional>
 		</dependency>
 
 		<dependency>
 			<groupId>io.vertx</groupId>
 			<artifactId>vertx-auth-jwt</artifactId>
-			<version>3.3.3</version>
 		</dependency>
 
 		<!-- Enable Vertx Codegen -->
 		<dependency>
 			<groupId>io.vertx</groupId>
 			<artifactId>vertx-codegen</artifactId>
-			<version>3.3.3</version>
 			<scope>provided</scope>
 		</dependency>
 
@@ -85,21 +81,18 @@
 		<dependency>
 			<groupId>io.vertx</groupId>
 			<artifactId>vertx-service-discovery</artifactId>
-			<version>3.3.3</version>
 		</dependency>
 
 		<!-- Circuit Breaker -->
 		<dependency>
 			<groupId>io.vertx</groupId>
 			<artifactId>vertx-circuit-breaker</artifactId>
-			<version>3.3.3</version>
 		</dependency>
 
 		<!-- Hazelcast -->
 		<dependency>
 			<groupId>io.vertx</groupId>
 			<artifactId>vertx-hazelcast</artifactId>
-			<version>3.3.3</version>
 		</dependency>
 
 	</dependencies>

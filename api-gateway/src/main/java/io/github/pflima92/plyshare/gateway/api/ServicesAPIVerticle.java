@@ -31,6 +31,8 @@ public class ServicesAPIVerticle extends RestAPIVerticle {
 
 	@Override
 	protected Router router() {
+		
+		// TODO retrieve plug and play routes to api
 
 		return RouterBuilder.create(vertx)
 				.scanClasspath(true)
