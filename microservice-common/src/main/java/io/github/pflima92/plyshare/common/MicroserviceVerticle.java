@@ -5,8 +5,8 @@ package io.github.pflima92.plyshare.common;
 
 import static org.jspare.core.container.Environment.registryResource;
 
+import org.jspare.vertx.bootstrap.VerticleInitializer;
 import org.jspare.vertx.builder.ProxyServiceBuilder;
-import org.jspare.vertx.utils.VerticleInitializer;
 
 import io.github.pflima92.plyshare.common.circuitbreaker.CircuitBreakerHolder;
 import io.github.pflima92.plyshare.common.configuration.ConfigurationProvider;
